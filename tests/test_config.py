@@ -29,6 +29,15 @@ class ConfigTests(unittest.TestCase):
         config = load_config(ROOT / "configs" / "csi300_mlp.yaml")
         self.assertEqual(config["model"]["name"], "mlp")
 
+    def test_temporal_mixer_demo_config_is_valid(self) -> None:
+        config = load_config(ROOT / "configs" / "demo_synthetic_temporal_mixer.yaml")
+        self.assertEqual(config["model"]["name"], "temporal_mixer")
+        self.assertEqual(config["model"]["params"]["lookback_sessions"], 60)
+        residual = load_config(
+            ROOT / "configs" / "demo_synthetic_temporal_mixer_residual.yaml"
+        )
+        self.assertTrue(residual["model"]["params"]["use_last_session_residual"])
+
     def test_overlapping_windows_are_rejected(self) -> None:
         config = load_config(ROOT / "configs" / "demo_synthetic.yaml")
         config["splits"]["validation"] = ["2021-12-01", "2022-12-31"]

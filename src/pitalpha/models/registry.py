@@ -114,6 +114,16 @@ _BUILTINS: dict[str, tuple[ModelDescriptor, str, str]] = {
         "pitalpha.models.market_context",
         "fit_predict_market_context",
     ),
+    "temporal_mixer": (
+        ModelDescriptor(
+            name="temporal_mixer",
+            provider="built_in",
+            input_kind="temporal",
+            description="Compact causal 60-session patch and temporal mixing baseline.",
+        ),
+        "pitalpha.models.temporal_mixer",
+        "fit_predict_temporal_mixer",
+    ),
 }
 
 

@@ -35,7 +35,10 @@ class ModelContractTests(unittest.TestCase):
     def test_registry_lists_models_without_loading_optional_torch_models(self) -> None:
         descriptors = list_model_descriptors()
         names = {str(row["name"]) for row in descriptors}
-        self.assertEqual(names, {"ridge", "lightgbm", "mlp", "market_context"})
+        self.assertEqual(
+            names,
+            {"ridge", "lightgbm", "mlp", "market_context", "temporal_mixer"},
+        )
 
     def test_ridge_satisfies_test_label_independence_contract(self) -> None:
         report = audit_test_label_independence(

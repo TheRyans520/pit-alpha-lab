@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "status": "retain_as_development_baseline_not_promoted",
+  "scope": "deterministic synthetic software fixture; not real-market evidence",
+  "recorded_on": "2026-09-30",
+  "test_window": ["2023-01-02", "2025-12-31"],
+  "primary_portfolio": "weekly top-10 equal weight with retention rank 15",
+  "primary_one_way_cost_bps": 10,
+  "runs": [
+    {
+      "model": "ridge",
+      "run_id": "demo-synthetic-ridge-349c20d9028e-20260929T163033Z",
+      "config": "configs/demo_synthetic.yaml",
+      "config_sha256": "349c20d9028e6b2e944a1efa51216533ce63b983a32dbdd775ae5f6d76e246fc"
+    },
+    {
+      "model": "temporal_mixer_v0",
+      "run_id": "demo-synthetic-temporal-mixer-f605ac7f0006-20260929T162531Z",
+      "config": "configs/demo_synthetic_temporal_mixer.yaml",
+      "config_sha256": "f605ac7f00065c44ca29d898f4267ac477cc5f28c5b31fa16f53edb639488759"
+    },
+    {
+      "model": "temporal_mixer_residual",
+      "run_id": "demo-synthetic-temporal-mixer-residual-603f828cde31-20260929T163406Z",
+      "config": "configs/demo_synthetic_temporal_mixer_residual.yaml",
+      "config_sha256": "603f828cde31cc4f7e6e7dfd155fefff7ee786837af9e43050fc2922270fc797"
+    }
+  ],
+  "primary_buffered_results": {
+    "ridge": {
+      "ic": 0.10289008489210306,
+      "rank_ic": 0.09534558535476437,
+      "annualized_return": 0.07743885512125748,
+      "sharpe": 0.6452755264250645,
+      "maximum_drawdown": -0.10211696766072798,
+      "mean_turnover": 0.08821134226557795,
+      "breakeven_one_way_cost_bps": 43.522342787074535
+    },
+    "temporal_mixer_v0": {
+      "ic": 0.05867440526586303,
+      "rank_ic": 0.058249240086814535,
+      "annualized_return": 0.03696836702772899,
+      "sharpe": 0.34655346322776964,
+      "maximum_drawdown": -0.1499492870199599,
+      "mean_turnover": 0.08611518088263555,
+      "breakeven_one_way_cost_bps": 26.711640610248644
+    },
+    "temporal_mixer_residual": {
+      "ic": 0.07689591400998812,
+      "rank_ic": 0.07644483587876848,
+      "annualized_return": 0.04805830457034754,
+      "sharpe": 0.4276160118158405,
+      "maximum_drawdown": -0.13481877074149573,
+      "mean_turnover": 0.11758424100603532,
+      "breakeven_one_way_cost_bps": 25.825813054953038
+    }
+  },
+  "decision": {
+    "residual_ablation": "accepted as the stronger temporal development baseline",
+    "champion": "ridge",
+    "promotion": false,
+    "reason": "the residual variant improves prediction and net performance over v0 but remains below Ridge and raises turnover"
+  },
+  "limitations": [
+    "The fixture is synthetic and exists to test software and methodology, not market profitability.",
+    "The local run manifests did not receive a GITHUB_SHA; exact configs and run IDs are retained, and the implementation is versioned in the repository milestone that records this comparison.",
+    "No additional synthetic hyperparameter search is permitted after this two-variant comparison."
+  ]
+}

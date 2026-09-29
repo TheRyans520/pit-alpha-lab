@@ -1,0 +1,81 @@
+schema_version: 1
+
+experiment:
+  name: demo-synthetic-temporal-mixer-residual
+  seed: 17
+
+data:
+  source: synthetic
+  snapshot_id: synthetic-equity-panel-v1
+  universe: synthetic-30
+  start: "2018-01-01"
+  end: "2025-12-31"
+  checksum_manifest: null
+
+data_quality:
+  minimum_rows: 60000
+  minimum_daily_members: 30
+  maximum_daily_members: 30
+  minimum_feature_coverage: 0.95
+  minimum_label_coverage: 0.99
+  minimum_realized_return_coverage: 0.99
+  maximum_absolute_realized_return: 0.50
+  minimum_ohlc_coverage: 0.95
+
+features:
+  set: synthetic-temporal-stack-v0
+  missing_treatment: training_median_with_explicit_observed_and_row_masks
+
+label:
+  expression: "open[t+6] / open[t+1] - 1"
+  horizon_trading_days: 5
+  cross_sectional_winsorization: [0.0, 1.0]
+
+splits:
+  initial_train: ["2018-01-01", "2021-12-31"]
+  validation: ["2022-01-01", "2022-12-31"]
+  test: ["2023-01-01", "2025-12-31"]
+  annual_walk_forward_refit: true
+  embargo_trading_days: 6
+
+model:
+  name: temporal_mixer
+  params:
+    lookback_sessions: 60
+    patch_size: 5
+    hidden_dim: 32
+    mixer_blocks: 2
+    token_mlp_dim: 32
+    channel_mlp_dim: 64
+    use_last_session_residual: true
+    dropout: 0.10
+    learning_rate: 0.001
+    weight_decay: 0.0001
+    batch_size: 512
+    prediction_batch_size: 1024
+    max_epochs: 4
+    patience: 2
+    minimum_delta: 0.00001
+    validation_dates: 126
+    seed: 17
+    torch_num_threads: 4
+
+portfolio:
+  construction: top_k_equal_weight_with_buffer
+  top_k: 10
+  retention_rank: 15
+  rebalance: weekly
+  one_way_cost_bps: [0, 5, 10, 20]
+  primary_cost_bps: 10
+
+evaluation:
+  annual_windows: true
+  quantiles: 5
+  signal_decay_horizons: [1, 5, 10, 20]
+  bootstrap:
+    method: moving_block
+    block_length_dates: 10
+    replications: 1000
+
+artifacts:
+  root: artifacts/demo-synthetic-temporal-mixer-residual

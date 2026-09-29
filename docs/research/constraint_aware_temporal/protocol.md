@@ -204,6 +204,18 @@ It is intentionally not wired into the real case-study ledger yet. Integration i
 new data contract supplies audited point-in-time execution fields; inventing those fields would make
 the backtest look more realistic while reducing its evidential value.
 
+The model-input side now has an executable
+[temporal tensor contract](temporal_tensor_contract.md). It builds calendar-aligned causal windows,
+keeps missing rows separate from missing feature cells, rejects known outcome columns and includes a
+future-perturbation test. It does not make the current Alpha158 snapshot equivalent to the required
+raw 60-session bar dataset; real-data model training remains behind the data gate.
+
+The smallest built-in `temporal_mixer` now runs through the common adapter. A synthetic-only
+last-session residual ablation improved the plain mixer but remained below Ridge and increased
+turnover, so the residual is retained as the development reference without promotion. The exact
+comparison is recorded in `case_studies/synthetic_temporal_mixer`; additional synthetic tuning is
+closed.
+
 ## Evidence and accountability
 
 This protocol follows an explicit source/claim registry workflow based on the Scientific Agent

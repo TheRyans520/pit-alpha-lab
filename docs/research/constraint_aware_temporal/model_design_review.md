@@ -121,13 +121,16 @@ verification and empirical comparison are complete.
 
 ## Implementation order
 
-1. Freeze the 60-session tensor schema and its timestamp/missingness contract.
-2. Add boundary, causality and cross-sectional batch tests before model training.
-3. Implement the smallest temporal mixer through `ModelAdapter`.
-4. Reproduce it on synthetic data and development years only.
-5. Add market context, multiscale, uncertainty and soft cost/risk terms one at a time.
-6. Wire the hard projector only when audited PIT execution fields pass the data gate.
-7. Freeze code, environment and snapshot before the single confirmatory 2026 evaluation.
+1. **Complete:** freeze the generic 60-session tensor, timestamp and missingness contract. The
+   vendor-specific raw-field availability schema remains behind the real-data gate.
+2. **Complete:** add boundary, causality and future-perturbation tests before model training.
+3. **Complete:** implement the smallest temporal mixer through `ModelAdapter`.
+4. **Complete:** reproduce v0 and a last-session residual ablation on synthetic data. The residual
+   improves v0 but remains below Ridge, so it is retained without promotion.
+5. **Next:** freeze the raw-field schema and reproduce the baseline on development years only.
+6. Add market context, multiscale mixing, uncertainty and soft cost/risk terms one at a time.
+7. Wire the hard projector only when audited PIT execution fields pass the data gate.
+8. Freeze code, environment and snapshot before the single confirmatory 2026 evaluation.
 
 ## Primary records reviewed
 

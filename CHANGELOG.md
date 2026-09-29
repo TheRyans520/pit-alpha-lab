@@ -12,6 +12,12 @@ All notable project changes will be recorded here.
   concentration, turnover and cash conservation.
 - Added a preregistration candidate with evidence and claim registries for a fresh-holdout,
   constraint-aware temporal experiment.
+- Added a read-only, calendar-aware temporal tensor store with explicit row/feature masks,
+  outcome-column rejection and future-perturbation causality tests.
+- Added a compact built-in causal temporal mixer, a synthetic config and embargo-history handling
+  through the common model adapter contract.
+- Retained the last-session residual as the stronger synthetic temporal baseline while keeping
+  Ridge champion; published both temporal variants and the negative promotion decision.
 - Reworked the public README around audited results, reproducibility and the interactive dashboard.
 - Added a reviewed dashboard image, technical brief, interview guide and public-release checklist.
 - Added cross-platform verification scripts that reject global Python environments.

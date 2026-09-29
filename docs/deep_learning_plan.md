@@ -88,3 +88,8 @@ finance-specific and general time-series architectures by original task, protoco
 reproducibility and fit to the PIT contract. The selected first baseline is a compact temporal
 mixer; larger Transformers and foundation models remain deferred ablations rather than presumed
 upgrades.
+
+The compact temporal mixer and its calendar-aware data path are now implemented. On the synthetic
+development fixture, a last-session residual improved the plain mixer but both remained below
+Ridge; the residual is retained as an engineering baseline, not promoted as an alpha result. See
+[`case_studies/synthetic_temporal_mixer/README.md`](../case_studies/synthetic_temporal_mixer/README.md).

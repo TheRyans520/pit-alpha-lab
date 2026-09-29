@@ -166,12 +166,17 @@ Small derived result tables and their exact experiment identifiers are retained 
   market-context neural experiments, cost-aware portfolios, uncertainty, API and dashboard.
 - Current champion: Ridge under the frozen 10 bps protocol.
 - Rejected hypothesis: generic flat-feature MLP and current context gate improve net performance.
+- Development-only temporal result: a causal mixer and last-session residual now run end to end on
+  the synthetic fixture. The residual improves v0 but remains below Ridge, so Ridge stays champion;
+  see the [transparent comparison](case_studies/synthetic_temporal_mixer/README.md).
 - Next gate: true 60-day temporal sequences evaluated on an untouched period or new market; no more
   confirmatory tuning against 2021–2025. The new
   [constraint-aware temporal protocol](docs/research/constraint_aware_temporal/protocol.md) freezes
   causal, tradeability, liquidity, capital and robustness requirements before fresh-label access.
   The [model design review](docs/research/constraint_aware_temporal/model_design_review.md) makes a
-  primary-paper and official-code review an explicit gate before reference-model implementation.
+  primary-paper and official-code review an explicit gate before reference-model implementation;
+  the calendar-aware [temporal tensor contract](docs/research/constraint_aware_temporal/temporal_tensor_contract.md)
+  and its future-perturbation tests are now implemented.
 
 Read the [CSI300 case study](case_studies/csi300_alpha/README.md),
 [technical brief](docs/technical_brief.md), [architecture](docs/architecture.md),

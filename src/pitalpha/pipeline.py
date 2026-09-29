@@ -176,7 +176,21 @@ def run_experiment(
     prediction_parts = []
     model_runs = []
     for fold in folds:
-        train = panel.loc[fold.training_mask(panel["datetime"]), ["datetime", "label", *feature_columns]]
+        if model_adapter.descriptor.input_kind == "temporal":
+            history_mask = (panel["datetime"] >= fold.train_start) & (
+                panel["datetime"] < fold.test_start
+            )
+            train = panel.loc[
+                history_mask,
+                ["datetime", "instrument", "label", *feature_columns],
+            ].copy()
+            context_only = ~fold.training_mask(train["datetime"])
+            train.loc[context_only, "label"] = float("nan")
+        else:
+            train = panel.loc[
+                fold.training_mask(panel["datetime"]),
+                ["datetime", "label", *feature_columns],
+            ]
         test = panel[fold.test_mask(panel["datetime"])].copy()
         scores, metadata = run_model_adapter(
             model_adapter,

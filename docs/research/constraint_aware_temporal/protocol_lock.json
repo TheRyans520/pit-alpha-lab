@@ -22,6 +22,18 @@
   "model_seeds": [7, 17, 29, 41, 53],
   "primary_cost_bps_one_way": 10,
   "stress_cost_bps_one_way": 20,
+  "development_reference_model": {
+    "name": "temporal_mixer",
+    "lookback_sessions": 60,
+    "patch_size": 5,
+    "hidden_dim": 32,
+    "mixer_blocks": 2,
+    "token_mlp_dim": 32,
+    "channel_mlp_dim": 64,
+    "use_last_session_residual": true,
+    "synthetic_variants_evaluated": ["plain", "last_session_residual"],
+    "synthetic_tuning_closed": true
+  },
   "portfolio": {
     "long_only": true,
     "maximum_gross_exposure": 1.0,

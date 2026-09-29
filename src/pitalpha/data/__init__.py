@@ -3,11 +3,14 @@
 from pitalpha.data.audited_qlib import SnapshotAuditError, load_audited_qlib_panel
 from pitalpha.data.quality import DataQualityError, audit_panel_quality, require_quality_pass
 from pitalpha.data.synthetic import FEATURE_COLUMNS, generate_synthetic_panel
+from pitalpha.data.temporal import CausalSequenceStore, TemporalSequenceBatch
 
 __all__ = [
     "DataQualityError",
     "FEATURE_COLUMNS",
+    "CausalSequenceStore",
     "SnapshotAuditError",
+    "TemporalSequenceBatch",
     "audit_panel_quality",
     "generate_synthetic_panel",
     "load_audited_qlib_panel",

@@ -66,6 +66,11 @@ the model in YAML does not grant execution permission; the run also requires
 integrity. Passing this audit is necessary but not sufficient: temporal models additionally require
 causality and sequence-boundary tests specific to their input builder.
 
+Temporal adapters receive `instrument` in addition to the common columns. Their training frame may
+also contain embargo-session feature rows with a missing `label`; those rows are history context
+only and must never enter fitting, validation selection or preprocessing state. This lets the first
+test decision retain a complete causal lookback without weakening the label embargo.
+
 ## Ownership boundary
 
 | Component | Model plugin | PIT Alpha Lab engine |
