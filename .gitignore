@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+*.so
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# Environments and local secrets
+.venv/
+.env
+.env.*
+!.env.example
+
+# Editors and operating systems
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Market data and generated artifacts
+/data/*
+!/data/README.md
+/artifacts/
+/reports/generated/
+/mlruns/
+*.parquet
+*.feather
+*.arrow
+*.pkl
+*.pickle
+*.tar
+*.tar.gz
+*.zip
+
+# Local logs and caches
+*.log
+/.cache/
+/.tmp/

@@ -1,0 +1,65 @@
+[build-system]
+requires = ["setuptools>=79,<81"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pit-alpha-lab"
+version = "0.1.0.dev0"
+description = "Point-in-time, leakage-safe and cost-aware quantitative equity research platform."
+readme = "README.md"
+requires-python = ">=3.10,<3.11"
+license = { text = "MIT" }
+authors = [
+  { name = "Yuxuan Pan" }
+]
+keywords = [
+  "quantitative-finance",
+  "point-in-time",
+  "machine-learning",
+  "backtesting",
+  "portfolio"
+]
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Intended Audience :: Financial and Insurance Industry",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3.10",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence"
+]
+dependencies = [
+  "numpy==2.2.6",
+  "pandas==2.3.3",
+  "scipy==1.15.3",
+  "scikit-learn==1.7.2",
+  "PyYAML==6.0.3",
+  "pyarrow==25.0.1",
+  "lightgbm==4.7.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/TheRyans520/pit-alpha-lab"
+Repository = "https://github.com/TheRyans520/pit-alpha-lab"
+Issues = "https://github.com/TheRyans520/pit-alpha-lab/issues"
+
+[project.optional-dependencies]
+qlib = ["pyqlib==0.9.7"]
+dl = ["torch==2.10.0"]
+api = ["fastapi==0.141.1", "uvicorn==0.52.4", "pydantic==2.13.5", "httpx==0.28.1"]
+
+[project.scripts]
+pitalpha = "pitalpha.cli:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.coverage.run]
+branch = true
+source = ["pitalpha"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 80

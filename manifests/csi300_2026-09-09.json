@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "snapshot_id": "qlib-cn-2026-09-09-common-2025",
+  "source": "https://github.com/chenditc/investment_data/releases/tag/2026-09-09",
+  "release_tag": "2026-09-09",
+  "archive_sha256": "3120d92c7058abb176d48a46f910040e8506d096a24ca27d6cf4811b15efa161",
+  "publisher_manifest_sha256": "3fb54ef0a46fd056281695ed62bd4caed22ea199a543aeae907bc21d3319c4ff",
+  "investment_data_commit": "b8c129b4d9b838f050eac8b1135111b3b79fc894",
+  "qlib_exporter_commit": "b87a2c294d364a33fb739359886acffe8ec907d1",
+  "runtime_qlib_version": "0.9.7",
+  "runtime_qlib_commit": "79633dd9506ea689e5400dea0197717b5b3d74b7",
+  "market": "cn",
+  "universe": "csi300-historical-interval-membership",
+  "common_window": ["2008-01-01", "2025-12-31"],
+  "common_calendar_dates": 4376,
+  "common_stock_date_rows": 1312314,
+  "common_unique_instruments": 852,
+  "calendar_prefix_sha256": "c742100ab860df11f48478e9f72af50e03e69d70dfb540a66a5717629dcf7a81",
+  "raw_partition_digest": "f4aeb2aa7d1ac8823b66eaa8c2254cb568f19aee743ae833dcfbfa0fa993d3b5",
+  "feature_partition_digest": "2d735d86cfeed31ad445c6ab8dfaa13858fd766206c9506855162d3ee2ab263a",
+  "redistribution": "Archive and extracted market data are not redistributed by PIT Alpha Lab. Obtain them from the source and verify the checksum."
+}

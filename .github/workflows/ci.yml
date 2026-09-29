@@ -1,0 +1,79 @@
+name: ci
+
+permissions:
+  contents: read
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  q0-smoke:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            venv_python: .venv/bin/python
+          - os: windows-latest
+            venv_python: .venv/Scripts/python.exe
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: pip
+      - name: Create isolated environment
+        shell: bash
+        run: python -m venv .venv
+      - name: Install Q0 dependencies inside the environment
+        shell: bash
+        run: |
+          ${{ matrix.venv_python }} -m pip install -r requirements.txt
+          ${{ matrix.venv_python }} -m pip install --no-deps -e .
+      - name: Compile and test
+        shell: bash
+        run: |
+          ${{ matrix.venv_python }} -m compileall -q src tests
+          ${{ matrix.venv_python }} -m unittest discover -s tests -v
+      - name: Validate CLI contracts
+        shell: bash
+        run: |
+          ${{ matrix.venv_python }} -m pitalpha doctor
+          ${{ matrix.venv_python }} -m pitalpha config validate configs/demo_synthetic.yaml
+
+  api-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: pip
+      - name: Create isolated API environment
+        run: python -m venv .venv-api
+      - name: Install API dependencies inside the environment
+        run: |
+          .venv-api/bin/python -m pip install -r requirements-api.txt
+          .venv-api/bin/python -m pip install --no-deps -e .
+      - name: Test read-only API contracts
+        run: .venv-api/bin/python -m unittest tests.test_api -v
+
+  web-build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - name: Install locked project-local dependencies
+        run: npm ci
+      - name: Typecheck and production build
+        run: npm run build

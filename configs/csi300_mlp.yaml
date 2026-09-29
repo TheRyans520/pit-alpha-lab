@@ -1,0 +1,79 @@
+schema_version: 1
+
+experiment:
+  name: csi300-pit-mlp-seed17
+  seed: 17
+
+data:
+  source: qlib
+  adapter: audited_parquet
+  provider_uri_env: PITALPHA_QLIB_PROVIDER
+  audit_root_env: PITALPHA_QLIB_AUDIT_ROOT
+  release_tag: "2026-09-09"
+  snapshot_manifest: manifests/csi300_2026-09-09.json
+  snapshot_id: qlib-cn-2026-09-09-common-2025
+  universe: csi300-historical-interval-membership
+  start: "2008-01-01"
+  end: "2025-12-31"
+  checksum_manifest: manifests/csi300_2026-09-09.json
+
+data_quality:
+  minimum_rows: 1000000
+  minimum_daily_members: 290
+  maximum_daily_members: 310
+  minimum_feature_coverage: 0.95
+  minimum_label_coverage: 0.95
+  minimum_realized_return_coverage: 0.95
+  maximum_absolute_realized_return: 0.50
+  minimum_ohlc_coverage: 0.95
+
+features:
+  set: alpha158-ohlcv-157
+  missing_treatment: training_median_then_zero_if_all_missing
+
+label:
+  expression: "Ref($open,-6) / Ref($open,-1) - 1"
+  horizon_trading_days: 5
+  cross_sectional_winsorization: [0.01, 0.99]
+
+splits:
+  initial_train: ["2008-01-01", "2018-12-31"]
+  validation: ["2019-01-01", "2020-12-31"]
+  test: ["2021-01-01", "2025-12-31"]
+  annual_walk_forward_refit: true
+  embargo_trading_days: 6
+
+model:
+  name: mlp
+  params:
+    hidden_dims: [64, 32]
+    dropout: 0.10
+    learning_rate: 0.001
+    weight_decay: 0.0001
+    batch_size: 8192
+    max_epochs: 6
+    patience: 2
+    minimum_delta: 0.00001
+    validation_dates: 126
+    seed: 17
+    torch_num_threads: 8
+
+portfolio:
+  construction: top_k_equal_weight_with_buffer
+  top_k: 30
+  retention_rank: 40
+  rebalance: first_available_trading_day_each_week
+  one_way_cost_bps: [0, 5, 10, 20]
+  primary_cost_bps: 10
+
+evaluation:
+  annual_windows: true
+  quantiles: 5
+  signal_decay_horizons: [1, 5]
+  bootstrap:
+    method: moving_block
+    block_length_dates: 10
+    replications: 1000
+
+artifacts:
+  root: artifacts/csi300-pit-mlp-seed17

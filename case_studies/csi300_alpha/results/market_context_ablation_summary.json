@@ -1,0 +1,14 @@
+{
+  "all_artifacts_verified": true,
+  "caveat": "Exploratory comparison after the test period had already been observed.",
+  "cost_bps": 10,
+  "decision": "retain_ridge_reject_current_context_architecture",
+  "observations": {
+    "context_effect_on_rank_ic_with_ranking": -0.015333160647772464,
+    "ranking_effect_on_rank_ic_without_context": 0.016549770158723325,
+    "ridge_minus_best_neural_net_annualized_return": 0.10493408068397925
+  },
+  "schema_version": 1,
+  "seed": 17,
+  "source_csv": "case_studies/csi300_alpha/results/market_context_ablation_10bps.csv"
+}
