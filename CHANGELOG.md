@@ -4,6 +4,14 @@ All notable project changes will be recorded here.
 
 ## Unreleased
 
+- Added a literature-first architecture gate covering finance-specific and recent general
+  time-series models before implementing the built-in temporal reference model.
+- Added a lazy built-in/external model registry, explicit external-code opt-in, response validation,
+  label-independence and input-mutation audits, CLI discovery and a read-only model API.
+- Added a deterministic hard-constraint kernel for tradeability, liquidity participation,
+  concentration, turnover and cash conservation.
+- Added a preregistration candidate with evidence and claim registries for a fresh-holdout,
+  constraint-aware temporal experiment.
 - Reworked the public README around audited results, reproducibility and the interactive dashboard.
 - Added a reviewed dashboard image, technical brief, interview guide and public-release checklist.
 - Added cross-platform verification scripts that reject global Python environments.

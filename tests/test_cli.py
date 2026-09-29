@@ -14,6 +14,15 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class CliTests(unittest.TestCase):
+    def test_models_list_command(self) -> None:
+        output = io.StringIO()
+        with redirect_stdout(output):
+            code = main(["models", "list"])
+        payload = json.loads(output.getvalue())
+        self.assertEqual(code, 0)
+        self.assertEqual(payload["entry_point_group"], "pitalpha.models")
+        self.assertIn("ridge", {row["name"] for row in payload["models"]})
+
     def test_config_validate_command(self) -> None:
         output = io.StringIO()
         with redirect_stdout(output):

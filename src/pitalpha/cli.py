@@ -33,6 +33,15 @@ def _parser() -> argparse.ArgumentParser:
     create.add_argument("--output", required=True, type=Path)
     create.add_argument("--code-revision", default=None)
 
+    models_parser = commands.add_parser("models", help="Inspect the model adapter registry")
+    model_commands = models_parser.add_subparsers(dest="models_command", required=True)
+    list_models = model_commands.add_parser("list", help="List built-in and installed model names")
+    list_models.add_argument(
+        "--include-external-names",
+        action="store_true",
+        help="List installed third-party entry-point names without loading their code",
+    )
+
     run_parser = commands.add_parser("run", help="Execute a supported experiment config")
     run_parser.add_argument("config", type=Path)
     run_parser.add_argument("--output-root", type=Path, default=None)
@@ -52,6 +61,11 @@ def _parser() -> argparse.ArgumentParser:
         type=float,
         default=None,
         help="Override the within-date ranking-loss weight for an auditable ablation",
+    )
+    run_parser.add_argument(
+        "--allow-external-model",
+        action="store_true",
+        help="Execute the selected third-party pitalpha.models entry point after manual review",
     )
     serve_parser = commands.add_parser("serve", help="Serve the read-only research API")
     serve_parser.add_argument("--host", default="127.0.0.1")
@@ -79,6 +93,15 @@ def main(argv: Sequence[str] | None = None) -> int:
             output = write_json_atomic(args.output, manifest)
             print(json.dumps({"created": str(output), "run_id": manifest["run_id"]}, indent=2))
             return 0
+        if args.command == "models" and args.models_command == "list":
+            from pitalpha.models import ENTRY_POINT_GROUP, list_model_descriptors
+
+            payload = {
+                "entry_point_group": ENTRY_POINT_GROUP,
+                "models": list_model_descriptors(include_external_names=args.include_external_names),
+            }
+            print(json.dumps(payload, indent=2, ensure_ascii=False))
+            return 0
         if args.command == "run":
             from pitalpha.pipeline import run_experiment
 
@@ -88,6 +111,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 model_seed_override=args.model_seed,
                 disable_market_context=args.disable_market_context,
                 ranking_weight_override=args.ranking_weight,
+                allow_external_model=args.allow_external_model,
             )
             print(json.dumps(result, indent=2, ensure_ascii=False))
             return 0

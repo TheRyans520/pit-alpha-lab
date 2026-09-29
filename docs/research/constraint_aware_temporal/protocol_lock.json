@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "protocol_id": "constraint-aware-temporal-alpha-v0.1-draft",
+  "status": "design_freeze_candidate",
+  "created_on": "2026-09-29",
+  "confirmatory": false,
+  "freeze_requires": [
+    "human source verification",
+    "immutable 2026 data snapshot manifest",
+    "executable temporal feature schema",
+    "all pre-holdout tests passing"
+  ],
+  "windows": {
+    "development": ["2008-01-01", "2023-12-31"],
+    "validation": ["2024-01-01", "2025-12-31"],
+    "confirmatory_test": ["2026-01-05", "2026-08-31"]
+  },
+  "lookback_trading_days": 60,
+  "prediction_horizons_trading_days": [1, 5, 20],
+  "primary_horizon_trading_days": 5,
+  "minimum_embargo_trading_days": 20,
+  "model_seeds": [7, 17, 29, 41, 53],
+  "primary_cost_bps_one_way": 10,
+  "stress_cost_bps_one_way": 20,
+  "portfolio": {
+    "long_only": true,
+    "maximum_gross_exposure": 1.0,
+    "maximum_single_name_weight": 0.05,
+    "rebalance": "weekly",
+    "target_names": 30
+  },
+  "promotion_gate": {
+    "hard_constraint_violations": 0,
+    "minimum_seeds_with_positive_excess_return_vs_ridge": 4,
+    "median_net_sharpe_must_exceed_ridge": true,
+    "moving_block_interval_for_mean_daily_excess_return_must_exclude_zero": true,
+    "median_20bps_net_return_must_be_positive": true,
+    "maximum_worst_seed_drawdown_gap_vs_ridge_percentage_points": 5.0
+  }
+}

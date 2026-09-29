@@ -92,6 +92,28 @@ public tick/order-book data or a synthetic exchange. Compare TWAP, VWAP and part
 policies under fees, latency and inventory constraints. Do not present daily bars as an HFT
 simulation and do not let this extension delay Q1-Q6.
 
+## Q7 - Dual product: evaluation engine and reference model
+
+Track A makes the framework useful for any compatible model:
+
+- a versioned built-in/external model adapter contract;
+- explicit opt-in before third-party Python code can execute;
+- common point-in-time splits, constraints, portfolio ledger, costs and artifacts;
+- model-independent hard tradeability, liquidity, concentration, turnover and cash rules;
+- API and dashboard diagnostics for requested versus executable positions.
+
+Track B develops one built-in reference model through a literature-first gate:
+
+- compare recent finance and time-series models using primary papers and official code;
+- freeze a causal 60-session tensor and missingness contract;
+- implement a compact temporal mixer before trying larger Transformers;
+- add context, multiscale, uncertainty and soft constraint terms as isolated ablations;
+- use a genuinely fresh holdout and retain rejected or negative variants.
+
+Shared exit criterion: built-in and user-supplied models must traverse the same engine-owned
+constraints and reporting path. The reference model is a demonstrated option, not privileged
+evidence for the framework.
+
 ## Public-release definition of done
 
 - No licensed raw data, archives, credentials, virtual environment or vendor source in Git.

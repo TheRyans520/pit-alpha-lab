@@ -34,7 +34,7 @@ from pitalpha.data import (
 )
 from pitalpha.environment import repository_root
 from pitalpha.metrics import breakeven_cost_bps, portfolio_summary
-from pitalpha.models import fit_predict_lightgbm, fit_predict_ridge
+from pitalpha.models import resolve_model, run_model_adapter
 from pitalpha.reporting import render_experiment_report
 from pitalpha.signals import (
     coverage_diagnostics,
@@ -127,6 +127,7 @@ def run_experiment(
     model_seed_override: int | None = None,
     disable_market_context: bool = False,
     ranking_weight_override: float | None = None,
+    allow_external_model: bool = False,
 ) -> dict[str, Any]:
     config_path = Path(config_path)
     config = load_config(config_path)
@@ -139,18 +140,7 @@ def run_experiment(
             ranking_weight=ranking_weight_override,
         )
     model_name = str(config["model"]["name"])
-    model_functions = {"ridge": fit_predict_ridge, "lightgbm": fit_predict_lightgbm}
-    if model_name == "mlp":
-        from pitalpha.models.mlp import fit_predict_mlp
-
-        model_functions["mlp"] = fit_predict_mlp
-    if model_name == "market_context":
-        from pitalpha.models.market_context import fit_predict_market_context
-
-        model_functions["market_context"] = fit_predict_market_context
-    if model_name not in model_functions:
-        raise RuntimeError(f"unsupported model: {model_name}")
-    fit_predict = model_functions[model_name]
+    model_adapter = resolve_model(model_name, allow_external=allow_external_model)
 
     started = datetime.now(timezone.utc)
     manifest = build_run_manifest(
@@ -188,7 +178,13 @@ def run_experiment(
     for fold in folds:
         train = panel.loc[fold.training_mask(panel["datetime"]), ["datetime", "label", *feature_columns]]
         test = panel[fold.test_mask(panel["datetime"])].copy()
-        scores, metadata = fit_predict(train, test, feature_columns, config["model"]["params"])
+        scores, metadata = run_model_adapter(
+            model_adapter,
+            train,
+            test,
+            feature_columns,
+            config["model"]["params"],
+        )
         test["score"] = scores
         test["fold"] = fold.name
         forward_columns = [

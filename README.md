@@ -25,6 +25,13 @@ the parts that usually invalidate those results:
 The project is designed as an interview-ready QR/QD portfolio project and a reusable research
 foundation. It is not an offer to trade or evidence of live execution performance.
 
+It now has two explicit product tracks:
+
+1. **Trustworthy model evaluation:** plug in a built-in or reviewed external model, then test it
+   through the same PIT splits, hard market constraints, costs, risk metrics and artifacts.
+2. **Built-in reference alpha:** use the project's own literature-reviewed temporal model as a
+   transparent baseline, with every borrowed idea, ablation and failed result recorded.
+
 ## Headline case study
 
 The frozen CSI300 study uses annual walk-forward refits over 2021–2025, a weekly equal-weight Top-30
@@ -160,11 +167,16 @@ Small derived result tables and their exact experiment identifiers are retained 
 - Current champion: Ridge under the frozen 10 bps protocol.
 - Rejected hypothesis: generic flat-feature MLP and current context gate improve net performance.
 - Next gate: true 60-day temporal sequences evaluated on an untouched period or new market; no more
-  confirmatory tuning against 2021–2025.
+  confirmatory tuning against 2021–2025. The new
+  [constraint-aware temporal protocol](docs/research/constraint_aware_temporal/protocol.md) freezes
+  causal, tradeability, liquidity, capital and robustness requirements before fresh-label access.
+  The [model design review](docs/research/constraint_aware_temporal/model_design_review.md) makes a
+  primary-paper and official-code review an explicit gate before reference-model implementation.
 
 Read the [CSI300 case study](case_studies/csi300_alpha/README.md),
 [technical brief](docs/technical_brief.md), [architecture](docs/architecture.md),
-[data-source policy](docs/data_sources.md), [deep-learning plan](docs/deep_learning_plan.md) and
+[data-source policy](docs/data_sources.md), [deep-learning plan](docs/deep_learning_plan.md),
+[model plugin contract](docs/model_plugin_contract.md) and
 [interview guide](docs/interview_guide.md) for the full evidence trail.
 
 ## License and disclaimer

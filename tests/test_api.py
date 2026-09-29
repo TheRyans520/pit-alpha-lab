@@ -95,6 +95,10 @@ class APITests(unittest.TestCase):
                     self.assertEqual((await client.get("/api/health")).status_code, 200)
                     listing = (await client.get("/api/runs")).json()
                     self.assertEqual(listing["count"], 1)
+                    models = (await client.get("/api/models")).json()
+                    self.assertEqual(models["count"], 4)
+                    self.assertFalse(models["external_code_loaded"])
+                    self.assertIn("ridge", {row["name"] for row in models["models"]})
                     summary = (await client.get("/api/runs/run-1/summary")).json()
                     self.assertTrue(summary["artifacts_verified"])
                     equity = (

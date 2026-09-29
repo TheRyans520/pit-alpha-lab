@@ -13,6 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pitalpha import __version__
 from pitalpha.artifacts import sha256_file
 from pitalpha.environment import repository_root
+from pitalpha.models import ENTRY_POINT_GROUP, list_model_descriptors
 
 
 class RunStore:
@@ -104,6 +105,16 @@ def create_app(
     def runs() -> dict[str, Any]:
         items = store.list_runs()
         return {"runs": items, "count": len(items)}
+
+    @app.get("/api/models")
+    def models() -> dict[str, Any]:
+        items = list_model_descriptors(include_external_names=False)
+        return {
+            "models": items,
+            "count": len(items),
+            "external_entry_point_group": ENTRY_POINT_GROUP,
+            "external_code_loaded": False,
+        }
 
     @app.get("/api/runs/{run_id}/summary")
     def run_summary(run_id: str) -> dict[str, Any]:

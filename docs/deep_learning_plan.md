@@ -67,3 +67,24 @@ Primary references:
 
 The comparison reports parameter count, IC/RankIC dispersion,
 turnover, net Sharpe, drawdown and break-even cost. A higher gross IC alone is insufficient.
+
+## Stage 3: constraint-aware temporal alpha (started)
+
+The next model is now governed by
+[`docs/research/constraint_aware_temporal/protocol.md`](research/constraint_aware_temporal/protocol.md).
+The term *physical constraints* is operationalized as causal information, exchange tradeability,
+capital conservation, liquidity participation, concentration and turnover limits. These are hard
+feasibility rules; regime, cost and risk terms remain soft objectives and require ablation.
+
+The first implementation is deliberately architecture-independent:
+`pitalpha.portfolio.constraints` converts desired weights into executable weights using independent
+buy/sell masks, ADV participation caps, turnover scaling and sell-before-buy cash accounting. It is
+not connected to the real-data ledger until a fresh audited snapshot supplies the required PIT
+execution fields.
+
+Before reference-model code is added, the
+[model design review](research/constraint_aware_temporal/model_design_review.md) compares recent
+finance-specific and general time-series architectures by original task, protocol, official code,
+reproducibility and fit to the PIT contract. The selected first baseline is a compact temporal
+mixer; larger Transformers and foundation models remain deferred ablations rather than presumed
+upgrades.
