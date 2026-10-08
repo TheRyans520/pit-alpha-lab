@@ -1,5 +1,14 @@
 # PIT Alpha Lab
 
+> **2026-10-08 audit status:** Historical CSI300 performance below is provisional.
+> Portfolio selection previously depended on future-return availability, and neural
+> inner validation lacked a label embargo. Code has been hardened, but the frozen
+> market partitions are unavailable on the handoff computer, so corrected real-data
+> returns have **not** been reproduced. Use the project as research-engineering
+> evidence; do not quote these historical returns as revalidated resume results.
+> See [the audit](docs/QUANT_RESUME_READINESS_AUDIT.md).
+
+
 [![CI](https://github.com/TheRyans520/pit-alpha-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/TheRyans520/pit-alpha-lab/actions/workflows/ci.yml)
 [![Python 3.10](https://img.shields.io/badge/Python-3.10-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![MIT License](https://img.shields.io/badge/License-MIT-2F855A.svg)](LICENSE)
@@ -28,7 +37,8 @@ foundation. It is not an offer to trade or evidence of live execution performanc
 It now has two explicit product tracks:
 
 1. **Trustworthy model evaluation:** plug in a built-in or reviewed external model, then test it
-   through the same PIT splits, hard market constraints, costs, risk metrics and artifacts.
+   through the same PIT splits, simplified long-only cost overlay, risk metrics and artifacts.
+   The separate execution-constraint component is not wired into the flagship ledger.
 2. **Built-in reference alpha:** use the project's own literature-reviewed temporal model as a
    transparent baseline, with every borrowed idea, ablation and failed result recorded.
 
@@ -183,6 +193,14 @@ Read the [CSI300 case study](case_studies/csi300_alpha/README.md),
 [data-source policy](docs/data_sources.md), [deep-learning plan](docs/deep_learning_plan.md),
 [model plugin contract](docs/model_plugin_contract.md) and
 [interview guide](docs/interview_guide.md) for the full evidence trail.
+
+## Audit and resume evidence
+
+Read the [implementation plan](docs/QUANT_ENGINEERING_IMPLEMENTATION_PLAN.md),
+[updated audit](docs/QUANT_RESUME_READINESS_AUDIT.md), and
+[verified resume facts](docs/QUANT_RESUME_FACTS.md) for the cross-device handoff.
+The [local benchmark and reconciliation records](docs/benchmarks/README.md) distinguish
+software verification from the still-unavailable corrected CSI300 reproduction.
 
 ## License and disclaimer
 

@@ -1,5 +1,14 @@
 # CSI300 point-in-time model study
 
+> **2026-10-08 audit status:** Historical CSI300 performance below is provisional.
+> Portfolio selection previously depended on future-return availability, and neural
+> inner validation lacked a label embargo. Code has been hardened, but the frozen
+> market partitions are unavailable on the handoff computer, so corrected real-data
+> returns have **not** been reproduced. Use the project as research-engineering
+> evidence; do not quote these historical returns as revalidated resume results.
+> See [the audit](../../docs/QUANT_RESUME_READINESS_AUDIT.md).
+
+
 This case study is the first real-data model comparison from the public package pipeline. It uses the frozen
 `qlib-cn-2026-09-09-common-2025` snapshot, historical interval-at-date CSI300 membership,
 Alpha158-OHLCV-157 features and annual expanding-window refits. Ridge, LightGBM, MLP and the

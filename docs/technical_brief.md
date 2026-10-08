@@ -1,5 +1,14 @@
 # PIT Alpha Lab technical brief
 
+> **2026-10-08 audit status:** Historical CSI300 performance below is provisional.
+> Portfolio selection previously depended on future-return availability, and neural
+> inner validation lacked a label embargo. Code has been hardened, but the frozen
+> market partitions are unavailable on the handoff computer, so corrected real-data
+> returns have **not** been reproduced. Use the project as research-engineering
+> evidence; do not quote these historical returns as revalidated resume results.
+> See [the audit](QUANT_RESUME_READINESS_AUDIT.md).
+
+
 ## The problem
 
 Quantitative research often fails between a promising prediction metric and a realizable portfolio.

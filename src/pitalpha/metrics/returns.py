@@ -9,7 +9,9 @@ import pandas as pd
 
 
 def return_metrics(returns: pd.Series) -> dict[str, float]:
-    values = returns.fillna(0.0).to_numpy(dtype=np.float64)
+    values = returns.to_numpy(dtype=np.float64)
+    if not np.isfinite(values).all() or np.any(values < -1.0):
+        raise ValueError("returns must be finite and at least -100%; missing outcomes need valuation")
     if len(values) == 0:
         raise ValueError("return series is empty")
     wealth = np.concatenate(([1.0], np.cumprod(1.0 + values)))

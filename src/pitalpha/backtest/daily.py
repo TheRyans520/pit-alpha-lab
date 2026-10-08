@@ -17,11 +17,13 @@ def _week_key(timestamp: pd.Timestamp) -> tuple[int, int]:
 def _next_weights(weights: dict[str, float], returns: dict[str, float], gross_return: float) -> dict[str, float]:
     denominator = 1.0 + gross_return
     if not np.isfinite(denominator) or denominator <= 0:
-        return {}
+        raise ValueError("cannot drift an insolvent or unvalued portfolio")
     updated = {}
     for instrument, weight in weights.items():
         realized = returns.get(instrument, np.nan)
-        asset_return = float(realized) if np.isfinite(realized) else 0.0
+        if not np.isfinite(realized):
+            raise ValueError(f"cannot drift holding without a finite return: {instrument}")
+        asset_return = float(realized)
         value = weight * (1.0 + asset_return) / denominator
         if value > 0:
             updated[instrument] = value
@@ -32,7 +34,21 @@ def _ledger(
     predictions: pd.DataFrame,
     cost_bps: Iterable[int],
     selector,
+    *,
+    universe_exit_policy: str = "error",
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
+    if universe_exit_policy not in {"error", "synthetic_liquidate_at_last_mark"}:
+        raise ValueError("unsupported universe exit policy")
+    required = {"datetime", "instrument", "score", "realized_return_1d"}
+    if not required.issubset(predictions.columns) or predictions.empty:
+        raise ValueError("portfolio input must contain nonempty dated predictions and returns")
+    if predictions[["datetime", "instrument"]].isna().any().any():
+        raise ValueError("portfolio keys must not be missing")
+    if predictions.duplicated(["datetime", "instrument"]).any():
+        raise ValueError("duplicate instrument-date portfolio keys")
+    cost_bps = tuple(cost_bps)
+    if not cost_bps or any(not np.isfinite(cost) or cost < 0 for cost in cost_bps):
+        raise ValueError("costs must be finite and non-negative")
     previous_weights: dict[str, float] = {}
     previous_week: tuple[int, int] | None = None
     daily_rows: list[dict[str, object]] = []
@@ -42,6 +58,12 @@ def _ledger(
         timestamp = pd.Timestamp(timestamp)
         group = group.sort_values("instrument", kind="stable")
         names = set(group["instrument"])
+        disappeared = sorted(set(previous_weights) - names)
+        if disappeared and universe_exit_policy == "error":
+            raise ValueError(
+                f"held instruments disappeared at {timestamp.date()}: {disappeared}; "
+                "verified exit valuation and tradeability evidence is required"
+            )
         carried = {name: weight for name, weight in previous_weights.items() if name in names}
         week = _week_key(timestamp)
         rebalance = week != previous_week
@@ -61,9 +83,12 @@ def _ledger(
         )
         if missing_return_weight > 0.0:
             raise ValueError(
-                f"selected holdings have unavailable next-period returns at {timestamp.date()}; "
+                f"selected holdings have unavailable next-period returns at {timestamp.date()}: "
+                f"{sorted(name for name in target if not np.isfinite(realized.get(name, np.nan)))}; "
                 "do not infer trade eligibility from future outcome availability"
             )
+        if any(float(realized[name]) < -1.0 for name in target):
+            raise ValueError("asset return below -100% is invalid for the long-only ledger")
         gross_return = float(
             math.fsum(
                 target[name] * float(realized[name])
@@ -71,12 +96,16 @@ def _ledger(
                 if np.isfinite(realized.get(name, np.nan))
             )
         )
+        if gross_return <= -1.0:
+            raise ValueError("portfolio is insolvent; cannot continue the ledger")
         weight_hhi = float(math.fsum(weight**2 for weight in target.values()))
         row: dict[str, object] = {
             "datetime": timestamp,
             "rebalance": rebalance,
             "selected_count": len(target),
             "invested_weight": float(math.fsum(target.values())),
+            "cash_weight": max(0.0, 1.0 - float(math.fsum(target.values()))),
+            "assumed_exit_count": len(disappeared),
             "missing_return_weight": missing_return_weight,
             "turnover": turnover,
             "gross_return": gross_return,
@@ -84,20 +113,30 @@ def _ledger(
             "effective_positions": float(1.0 / weight_hhi) if weight_hhi > 0.0 else 0.0,
         }
         for basis_points in cost_bps:
-            row[f"net_return_{basis_points}bps"] = gross_return - turnover * basis_points / 10_000.0
+            net = gross_return - turnover * basis_points / 10_000.0
+            if net <= -1.0:
+                raise ValueError("portfolio is insolvent after transaction costs")
+            row[f"net_return_{basis_points}bps"] = net
         daily_rows.append(row)
 
-        if rebalance:
-            scores = dict(zip(group["instrument"], group["score"], strict=True))
-            for name, weight in sorted(target.items()):
-                holding_rows.append(
-                    {
-                        "datetime": timestamp,
-                        "instrument": name,
-                        "target_weight": weight,
-                        "score": scores.get(name, np.nan),
-                    }
-                )
+        scores = dict(zip(group["instrument"], group["score"], strict=True))
+        for name in union:
+            weight = target.get(name, 0.0)
+            asset_return = float(realized[name]) if weight > 0.0 else 0.0
+            holding_rows.append(
+                {
+                    "datetime": timestamp,
+                    "instrument": name,
+                    "rebalance": rebalance,
+                    "previous_weight": previous_weights.get(name, 0.0),
+                    "target_weight": weight,
+                    "asset_return": asset_return,
+                    "gross_contribution": weight * asset_return,
+                    "turnover_contribution": abs(weight - previous_weights.get(name, 0.0)),
+                    "assumed_universe_exit": name in disappeared,
+                    "score": scores.get(name, np.nan),
+                }
+            )
 
         previous_weights = _next_weights(target, realized, gross_return)
         previous_week = week
@@ -110,6 +149,7 @@ def build_ranked_portfolio(
     *,
     top_k: int,
     cost_bps: Iterable[int],
+    universe_exit_policy: str = "error",
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     if top_k <= 0:
         raise ValueError("top_k must be positive")
@@ -122,7 +162,7 @@ def build_ranked_portfolio(
         weight = 1.0 / len(usable)
         return {str(name): weight for name in usable["instrument"]}
 
-    return _ledger(predictions, cost_bps, selector)
+    return _ledger(predictions, cost_bps, selector, universe_exit_policy=universe_exit_policy)
 
 
 def build_buffered_ranked_portfolio(
@@ -131,6 +171,7 @@ def build_buffered_ranked_portfolio(
     top_k: int,
     retention_rank: int,
     cost_bps: Iterable[int],
+    universe_exit_policy: str = "error",
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Build equal-weight Top-K holdings with a transparent rank retention band.
 
@@ -165,13 +206,14 @@ def build_buffered_ranked_portfolio(
         weight = 1.0 / len(selected)
         return {name: weight for name in selected}
 
-    return _ledger(predictions, cost_bps, selector)
+    return _ledger(predictions, cost_bps, selector, universe_exit_policy=universe_exit_policy)
 
 
 def build_equal_weight_benchmark(
     predictions: pd.DataFrame,
     *,
     cost_bps: Iterable[int],
+    universe_exit_policy: str = "error",
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     def selector(group: pd.DataFrame, previous: dict[str, float]) -> dict[str, float]:
         del previous
@@ -179,4 +221,4 @@ def build_equal_weight_benchmark(
         weight = 1.0 / len(names)
         return {name: weight for name in names}
 
-    return _ledger(predictions, cost_bps, selector)
+    return _ledger(predictions, cost_bps, selector, universe_exit_policy=universe_exit_policy)

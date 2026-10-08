@@ -136,6 +136,8 @@ def create_app(
             "model": model_name,
             "primary_cost_bps": cost,
             "artifacts_verified": store.verify(directory, manifest),
+            "accounting_policy": manifest.get("accounting_policy", {"status": "legacy_unrevalidated"}),
+            "data_source": manifest["data"]["source"],
             "data": metrics["data"],
             "data_quality": metrics["data_quality"],
             "prediction": prediction[0] if prediction else None,

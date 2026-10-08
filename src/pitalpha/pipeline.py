@@ -47,6 +47,35 @@ from pitalpha.splits import annual_walk_forward_folds
 from pitalpha.statistics import moving_block_mean_interval
 
 
+def portfolio_evaluation_window(
+    predictions: pd.DataFrame, calendar: pd.Series, *, source: str
+) -> tuple[pd.DataFrame, dict[str, Any]]:
+    """Crop whole dates at the outcome boundary; never filter candidate outcomes.
+
+    Qlib's declared open(t+1) -> open(t+2) daily return needs two future
+    sessions. The synthetic fixture generates one next-session return directly.
+    """
+    lag = {"synthetic": 1, "qlib": 2}[source]
+    dates = pd.DatetimeIndex(pd.to_datetime(calendar).drop_duplicates().sort_values())
+    if len(dates) <= lag:
+        raise ValueError("insufficient calendar for portfolio evaluation")
+    last = dates[-lag - 1]
+    selected = predictions.loc[predictions["datetime"] <= last].copy()
+    if selected.empty:
+        raise ValueError("no portfolio dates with a complete calendar horizon")
+    return selected, {
+        "schema_version": 2,
+        "outcome_calendar_lag": lag,
+        "last_calendar_decision": last.date().isoformat(),
+        "excluded_terminal_rows": len(predictions) - len(selected),
+        "missing_held_return": "error",
+        "universe_exit_policy": ("synthetic_liquidate_at_last_mark" if source == "synthetic" else "error"),
+        "execution_constraints": "not_integrated_no_verified_market_masks",
+        "cost_accounting": "gross_drift_weights_minus_linear_turnover_cost_overlay",
+        "holdings_schema": "daily_positions_and_exits_v2",
+    }
+
+
 def _fold_frame(folds) -> pd.DataFrame:
     return pd.DataFrame(
         [
@@ -215,13 +244,9 @@ def run_experiment(
     )
 
     prediction_evaluation = predictions[predictions["label"].notna()].copy()
-    # Keep the decision-time universe intact. Filtering on whether a future return
-    # is available would make holdings depend on information unknown at t.
-    # The final snapshot date cannot have an observed next-day return and is
-    # excluded by a calendar boundary rather than per-instrument outcomes.
-    portfolio_evaluation = predictions.loc[
-        predictions["datetime"] < panel["datetime"].max()
-    ].copy()
+    portfolio_evaluation, accounting_policy = portfolio_evaluation_window(
+        predictions, panel["datetime"], source=config["data"]["source"]
+    )
     daily_ic = daily_information_coefficients(prediction_evaluation)
     prediction_summary = summarize_information_coefficients(daily_ic)
     evaluation_config = config["evaluation"]
@@ -246,11 +271,17 @@ def run_experiment(
     costs = [int(value) for value in config["portfolio"]["one_way_cost_bps"]]
     top_k = int(config["portfolio"]["top_k"])
     retention_rank = int(config["portfolio"]["retention_rank"])
-    ranked_daily, ranked_holdings = build_ranked_portfolio(portfolio_evaluation, top_k=top_k, cost_bps=costs)
-    buffered_daily, buffered_holdings = build_buffered_ranked_portfolio(
-        portfolio_evaluation, top_k=top_k, retention_rank=retention_rank, cost_bps=costs
+    exit_policy = accounting_policy["universe_exit_policy"]
+    ranked_daily, ranked_holdings = build_ranked_portfolio(
+        portfolio_evaluation, top_k=top_k, cost_bps=costs, universe_exit_policy=exit_policy
     )
-    benchmark_daily, benchmark_holdings = build_equal_weight_benchmark(portfolio_evaluation, cost_bps=costs)
+    buffered_daily, buffered_holdings = build_buffered_ranked_portfolio(
+        portfolio_evaluation, top_k=top_k, retention_rank=retention_rank, cost_bps=costs,
+        universe_exit_policy=exit_policy,
+    )
+    benchmark_daily, benchmark_holdings = build_equal_weight_benchmark(
+        portfolio_evaluation, cost_bps=costs, universe_exit_policy=exit_policy
+    )
     ledgers = {
         f"{model_name}_top_k": ranked_daily,
         f"{model_name}_top_k_buffered": buffered_daily,
@@ -284,6 +315,7 @@ def run_experiment(
     metrics = json_ready(
         {
             "schema_version": 1,
+            "accounting_policy": accounting_policy,
             "data": data_summary,
             "data_provenance": data_provenance,
             "data_quality": quality_summary,
@@ -336,6 +368,7 @@ def run_experiment(
     completed_manifest["folds"] = json_ready(folds_frame.to_dict(orient="records"))
     completed_manifest["data_provenance"] = json_ready(data_provenance)
     completed_manifest["data_quality"] = json_ready(quality_summary)
+    completed_manifest["accounting_policy"] = accounting_policy
     report = render_experiment_report(
         manifest=completed_manifest,
         data_summary=data_summary,
