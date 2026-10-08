@@ -45,6 +45,18 @@ class BacktestTests(unittest.TestCase):
         second_week = holdings[holdings["datetime"] == pd.Timestamp("2026-01-12")]
         self.assertEqual(set(second_week["instrument"]), {"A", "B"})
 
+    def test_selected_missing_future_return_fails_explicitly(self) -> None:
+        frame = pd.DataFrame(
+            {
+                "datetime": pd.to_datetime(["2026-01-05", "2026-01-05"]),
+                "instrument": ["A", "B"],
+                "score": [2.0, 1.0],
+                "realized_return_1d": [float("nan"), 0.01],
+            }
+        )
+        with self.assertRaisesRegex(ValueError, "unavailable next-period returns"):
+            build_ranked_portfolio(frame, top_k=1, cost_bps=[10])
+
     def test_retention_rank_cannot_be_smaller_than_top_k(self) -> None:
         with self.assertRaisesRegex(ValueError, "at least top_k"):
             build_buffered_ranked_portfolio(pd.DataFrame(), top_k=3, retention_rank=2, cost_bps=[0])

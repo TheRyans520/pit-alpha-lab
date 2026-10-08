@@ -215,7 +215,13 @@ def run_experiment(
     )
 
     prediction_evaluation = predictions[predictions["label"].notna()].copy()
-    portfolio_evaluation = predictions[predictions["realized_return_1d"].notna()].copy()
+    # Keep the decision-time universe intact. Filtering on whether a future return
+    # is available would make holdings depend on information unknown at t.
+    # The final snapshot date cannot have an observed next-day return and is
+    # excluded by a calendar boundary rather than per-instrument outcomes.
+    portfolio_evaluation = predictions.loc[
+        predictions["datetime"] < panel["datetime"].max()
+    ].copy()
     daily_ic = daily_information_coefficients(prediction_evaluation)
     prediction_summary = summarize_information_coefficients(daily_ic)
     evaluation_config = config["evaluation"]

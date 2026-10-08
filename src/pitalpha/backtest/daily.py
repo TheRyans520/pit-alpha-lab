@@ -59,6 +59,11 @@ def _ledger(
                 if not np.isfinite(realized.get(name, np.nan))
             )
         )
+        if missing_return_weight > 0.0:
+            raise ValueError(
+                f"selected holdings have unavailable next-period returns at {timestamp.date()}; "
+                "do not infer trade eligibility from future outcome availability"
+            )
         gross_return = float(
             math.fsum(
                 target[name] * float(realized[name])
