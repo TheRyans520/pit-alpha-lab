@@ -102,3 +102,11 @@ cost break-even statistic is not a calibrated market-impact or capacity model.
 
 The source market data are intentionally absent from Git. The compact tables in `results/` are
 derived outputs tied to the run above.
+
+## Recovered archive follow-up
+
+The original prediction and ledger artifacts were supplied privately after the initial handoff.
+Their hashes and saved-return arithmetic have been checked. The new
+[archived-run diagnostic](../../docs/LEGACY_REPLAY_FINDINGS.md) confirms future-outcome selection
+changes and unresolved held returns. Raw source audit partitions are still unavailable;
+this follow-up does not establish corrected historical performance.

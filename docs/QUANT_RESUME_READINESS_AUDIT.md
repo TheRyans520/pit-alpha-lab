@@ -120,3 +120,23 @@ pipeline, independent reconciliation, repeated-artifact checks, frontend build a
 benchmark are complete. Real-data reproduction is unavailable, as confirmed by the owner.
 The defensible current positioning is quantitative research engineering, strongest for Python QD
 and supportive of QR. There is no validated live execution or HFT claim.
+
+## Follow-up: recovered artifacts and cash-funded execution
+
+`docs/LEGACY_REPLAY_FINDINGS.md` supersedes the prior statement that saved real-data run artifacts
+were unavailable. The owner supplied them privately: 42 hashes and 216 summary rows from the three
+headline runs verify. Raw feature/price partitions remain unavailable. Strict saved-score replay
+stops at an unavailable held return on 2021-01-27; no corrected performance is asserted.
+
+The separate synthetic execution path now integrates `enforce_execution_constraints` with a
+fractional-share/cash account and actual fee deductions (`backtest/execution.py`). An independent
+checker (`backtest/execution_audit.py`) verifies the inventory/cash identities from inputs and fills.
+This does not retrofit real tradeability evidence into the historical CSI300 case.
+
+The review also found a concrete projection defect: clipping desired weights before solving for the
+simplex threshold changed the advertised Euclidean solution. Desired weights (1.0, 0.3), a 0.4
+single-name cap and a 0.5 gross cap must project to (0.4, 0.1), not (0.3, 0.2). This is fixed and
+regression-tested. Nonfinite portfolio notionals and non-boolean side masks are now rejected.
+
+All 91 local tests pass, including the cash-scenario and legacy-audit checks. New public files contain
+only synthetic fixtures and small derived diagnostics; private archived predictions are not uploaded.

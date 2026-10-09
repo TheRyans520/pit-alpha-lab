@@ -93,3 +93,24 @@ ready to demonstrate. C++/concurrency/networking require separate work for roles
 QR: data economics and a fresh confirmatory holdout remain the main gaps.
 Technical QT: this daily research tool supports risk/cost reasoning, but does not demonstrate
 order-book analysis, queue behavior, exchange execution or live risk management.
+
+## Second delivery: cash accounting and recovered experiment diagnosis
+
+Delivered after the old project backup became available:
+
+- `python -m pitalpha execution-demo`: fee-funded quantities/cash engine, execution-time side masks,
+  decision-time ADV checks, shared constraints and independent capital reconciliation.
+- `python -m pitalpha audit-run <private-run-directory>`: verifies hashes, recomputes saved summary
+  arithmetic, compares weekly selections and reports strict saved-score replay failures.
+- Recovered evidence: 1,090,227 saved model-prediction rows across three models, 42 artifact checksums
+  and 216 summary rows. Raw source partitions are still missing; corrected returns remain unknown.
+- Fixed the bounded projection to solve from the original desired weights, rather than first
+  clipping values and thereby changing the Euclidean projection problem. Invalid nonfinite notionals
+  and ambiguous non-boolean side masks now fail explicitly.
+- The full local suite now has 91 passing tests; the synthetic cash demo's five artifacts are
+  byte-identical across repeated execution. Model API discovery excludes the execution artifact type.
+- Added `docs/RESUME_PROJECT_ENTRY.md` with a concise English project entry and a five-minute demo.
+
+The older 75-test result and initial missing-artifact statements above describe the first delivery.
+The historical CSI300 ledger remains a cost overlay; the new cash-accounting path is an L0 fixture
+until real point-in-time execution/valuation inputs can support integration.

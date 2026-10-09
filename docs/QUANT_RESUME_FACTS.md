@@ -6,9 +6,10 @@
 - Base main: `239dab5b823fb3087b8f976995aa994120d10ad5`.
 - PR #1 reviewed and inherited: `f743e847740ad41b20a4b3fbc8250371ab092ded`.
 - Working branch: `codex/quant-resume-readiness`. Read the final commit from this branch's Git log.
-- Verified source digest: `708c8d852f275b6fbaac8d9f8cef71c27d4d8f4353f4d0d30b0be36d35252121`.
+- Stage-one benchmark/research source digest: `708c8d852f275b6fbaac8d9f8cef71c27d4d8f4353f4d0d30b0be36d35252121`.
 - Best current positioning: **Python quantitative research engineering / QD**, with QR methodology
-  evidence. Technical QT relevance is cost, turnover and risk reasoning, not exchange execution.
+  evidence. Technical QT relevance now includes fee-funded cash/inventory and blocked-order reasoning,
+  but not verified exchange execution.
 - Historical real-market returns: **not independently reproduced after the fixes**. The owner
   confirmed the required audit partitions are not on this computer.
 
@@ -20,11 +21,12 @@
 | Walk-forward execution | Yes on synthetic | Three annual test folds, 2023–2025 |
 | Ledger reconciliation | Yes | 23,490 predictions, 40,006 position/exit rows, 2,346 strategy/date rows across three strategies |
 | Artifact integrity | Yes | 14 checked hashes; 13 deterministic artifacts identical on repeated execution |
-| Local tests | Yes | 75 tests passed, including API and installed PyTorch models; no optional skips |
+| Local tests | Yes | 91 tests passed, including API and installed PyTorch models; no optional skips |
 | Frontend | Build verified | TypeScript + Vite production build; browser smoke not run |
 | Real CSI300 scale | Manifest claim only | 1,312,314 rows / 852 instruments / 4,376 dates; not recounted here |
 | Ridge 8.49%, Sharpe 0.445 | Historical provisional only | Preserved case-study CSV; do not use as a verified impact metric |
-| Market execution constraints | Separate component only | Not integrated into the flagship daily ledger |
+| Execution accounting | Synthetic integration verified | Fee-funded fractional shares, masks, ADV and turnover limits; not connected to real CSI300 |
+| Archived real predictions | Diagnosed | 1,090,227 model-prediction rows, 42 hashes and 216 summary rows; corrected returns not established |
 
 Sources: [`synthetic_reconciliation.json`](benchmarks/synthetic_reconciliation.json),
 [`synthetic_repeatability.json`](benchmarks/synthetic_repeatability.json),
@@ -33,9 +35,13 @@ Sources: [`synthetic_reconciliation.json`](benchmarks/synthetic_reconciliation.j
 
 ## Three English resume bullets
 
+For the latest concise entry, including the cash-accounting and archive-diagnosis additions,
+use [RESUME_PROJECT_ENTRY.md](RESUME_PROJECT_ENTRY.md). The bullets below remain alternative
+engineering descriptions with their original benchmark evidence.
+
 1. **Developed a Python quantitative equity research pipeline with five model adapters, purged
    walk-forward evaluation, transaction-cost analysis and a read-only FastAPI/React interface;
-   validated 75 automated tests covering data contracts, leakage, portfolio accounting and APIs.**
+   validated 91 automated tests covering data contracts, leakage, portfolio accounting and APIs.**
    Evidence: `src/pitalpha/models/registry.py`, `pipeline.py`, `splits/walk_forward.py`,
    `splits/validation.py`, `api.py`, `apps/web/`, and `bash scripts/verify.sh`.
    Five adapters exist; their contract/neural tests run here. This does not claim five fresh
@@ -76,9 +82,22 @@ owner's interview fluency. The separate resume assistant should select/shorten t
 
 | Track | Supported now | Still missing |
 |---|---|---|
-| Python QD | Packaging, model API, tests, reproducible artifacts, API/UI, measured ledger throughput | Production operations, concurrency/networking, cost-funded execution ledger; C++ if required by JD |
+| Python QD | Packaging, model API, tests, reproducible artifacts, API/UI, measured ledger throughput | Production operations, concurrency/networking, real execution-data integration; C++ if required by JD |
 | QR | Chronological validation, leakage regressions, baseline comparisons, IC/uncertainty/cost methods | Revalidated real-data economics, untouched holdout, paired model inference and independent market data |
 | Technical QT | Position/risk/turnover/cost reasoning | Microstructure, order book/queue data, executable market rules and live risk controls |
 
 Do not claim a production trading system, live profitability, institutional security-master
 coverage, calibrated capacity/impact, or HFT/low-latency infrastructure.
+
+## Execution and archive follow-up
+
+The [synthetic execution case](../case_studies/synthetic_execution/README.md) integrates the shared
+constraint kernel into a fee-funded fractional-share/cash engine. Five deterministic events and
+8 seeded 15-event stress paths test capital conservation, side blocking and turnover limits.
+The independent audit checks source marks, inventory continuity, filled notional, fees, cash and NAV.
+Two demo runs produced five identical artifacts; this is L0 accounting evidence, not strategy alpha.
+
+The [legacy diagnosis](LEGACY_REPLAY_FINDINGS.md) now verifies real saved outputs, while explicitly
+separating their arithmetic consistency from corrected data economics and model refitting.
+The former claim that all original experiment artifacts were unavailable is superseded: saved
+predictions and ledgers are now available privately; original raw/feature audit partitions are not.

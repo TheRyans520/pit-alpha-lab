@@ -20,6 +20,11 @@ def _parser() -> argparse.ArgumentParser:
     commands = parser.add_subparsers(dest="command", required=True)
 
     commands.add_parser("doctor", help="Report interpreter and isolation status")
+    execution_demo = commands.add_parser("execution-demo", help="Run the synthetic cash-funded execution case study")
+    execution_demo.add_argument("--output-root", type=Path, default=None)
+    audit_run = commands.add_parser("audit-run", help="Verify and diagnose a saved historical research run")
+    audit_run.add_argument("run_directory", type=Path)
+    audit_run.add_argument("--output", type=Path, default=None)
 
     config_parser = commands.add_parser("config", help="Configuration operations")
     config_commands = config_parser.add_subparsers(dest="config_command", required=True)
@@ -77,6 +82,17 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = _parser()
     args = parser.parse_args(argv)
     try:
+        if args.command == "audit-run":
+            from pitalpha.legacy_audit import audit_saved_run
+            result = audit_saved_run(args.run_directory)
+            if args.output is not None:
+                write_json_atomic(args.output, result)
+            print(json.dumps(result, indent=2))
+            return 0
+        if args.command == "execution-demo":
+            from pitalpha.execution_demo import run_execution_demo
+            print(json.dumps(run_execution_demo(args.output_root), indent=2))
+            return 0
         if args.command == "doctor":
             report = environment_report()
             print(json.dumps(report, indent=2, ensure_ascii=False))

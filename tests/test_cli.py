@@ -14,6 +14,19 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class CliTests(unittest.TestCase):
+    def test_execution_demo_command(self):
+        with tempfile.TemporaryDirectory() as directory, redirect_stdout(io.StringIO()) as output:
+            self.assertEqual(main(["execution-demo", "--output-root", directory]), 0)
+            self.assertEqual(json.loads(output.getvalue())["reconciliation"]["status"], "pass")
+
+    def test_audit_run_reports_diagnostic_without_certifying_market_returns(self):
+        from tests.test_legacy_audit import LegacyAuditTests
+        with tempfile.TemporaryDirectory() as directory, redirect_stdout(io.StringIO()) as output:
+            root = Path(directory)
+            LegacyAuditTests().fixture(root)
+            self.assertEqual(main(["audit-run", directory]), 0)
+            self.assertEqual(json.loads(output.getvalue())["corrected_market_performance"], "not_established")
+
     def test_models_list_command(self) -> None:
         output = io.StringIO()
         with redirect_stdout(output):

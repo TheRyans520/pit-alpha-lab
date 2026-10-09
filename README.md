@@ -194,11 +194,23 @@ Read the [CSI300 case study](case_studies/csi300_alpha/README.md),
 [model plugin contract](docs/model_plugin_contract.md) and
 [interview guide](docs/interview_guide.md) for the full evidence trail.
 
+## Cash accounting and archived-run diagnosis
+
+The [synthetic execution case study](case_studies/synthetic_execution/README.md) adds a separate
+fee-funded share/cash ledger with side restrictions, ADV clipping, turnover limits and independent
+NAV reconciliation. Run it with `python -m pitalpha execution-demo`.
+
+The [archived CSI300 diagnosis](docs/LEGACY_REPLAY_FINDINGS.md) checks 1,090,227 saved model
+predictions and 216 return-summary rows. It confirms selection differences and stops at unresolved
+held valuations; it does not report corrected performance. Run
+`python -m pitalpha audit-run /path/to/saved/run` on privately obtained experiment artifacts.
+
 ## Audit and resume evidence
 
 Read the [implementation plan](docs/QUANT_ENGINEERING_IMPLEMENTATION_PLAN.md),
 [updated audit](docs/QUANT_RESUME_READINESS_AUDIT.md), and
 [verified resume facts](docs/QUANT_RESUME_FACTS.md) for the cross-device handoff.
+A concise [English resume entry](docs/RESUME_PROJECT_ENTRY.md) maps each claim to evidence.
 The [local benchmark and reconciliation records](docs/benchmarks/README.md) distinguish
 software verification from the still-unavailable corrected CSI300 reproduction.
 

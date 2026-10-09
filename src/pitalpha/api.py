@@ -39,7 +39,8 @@ class RunStore:
         for manifest_path in self.root.glob("*/*/run_manifest.json"):
             manifest = self._json(manifest_path)
             run_id = manifest.get("run_id")
-            if isinstance(run_id, str) and manifest.get("status") == "completed":
+            if (isinstance(run_id, str) and manifest.get("status") == "completed"
+                    and manifest.get("kind", "research") == "research"):
                 index[run_id] = manifest_path.parent.resolve()
         return index
 
