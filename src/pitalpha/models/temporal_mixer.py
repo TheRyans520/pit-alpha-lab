@@ -16,6 +16,8 @@ import pandas as pd
 import torch
 from torch import nn
 
+from pitalpha.splits.validation import purged_validation_split
+
 from pitalpha.data import CausalSequenceStore, TemporalSequenceBatch
 from pitalpha.models.mlp import _seed_everything
 
@@ -334,13 +336,12 @@ def fit_predict_temporal_mixer(
     ).reset_index(drop=True)
     if training.empty:
         raise ValueError("temporal mixer training window has no finite labels")
-    unique_dates = pd.DatetimeIndex(training["datetime"].drop_duplicates())
-    validation_dates = int(params["validation_dates"])
-    if len(unique_dates) <= validation_dates:
-        raise ValueError("temporal mixer training window lacks dates for validation")
-    validation_start = unique_dates[-validation_dates]
-    subtrain = training[training["datetime"] < validation_start].reset_index(drop=True)
-    validation = training[training["datetime"] >= validation_start].reset_index(drop=True)
+    subtrain, validation, validation_metadata = purged_validation_split(
+        train,
+        validation_dates=int(params["validation_dates"]),
+        embargo_trading_days=int(params.get("validation_embargo_trading_days", 6)),
+    )
+
 
     history = pd.concat(
         [
@@ -441,7 +442,7 @@ def fit_predict_temporal_mixer(
         "history_context_rows": int((~finite_label).sum()),
         "subtrain_rows": int(len(subtrain)),
         "validation_rows": int(len(validation)),
-        "validation_start": pd.Timestamp(validation_start).date().isoformat(),
+        **validation_metadata,
         "test_rows": int(len(test)),
         "features": columns,
         "lookback_sessions": lookback_sessions,

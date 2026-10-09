@@ -1,0 +1,217 @@
+{
+  "runs": [
+    {
+      "artifact_hashes_verified": 14,
+      "calendar_policy": {
+        "cost_accounting": "gross_drift_weights_minus_linear_turnover_cost_overlay",
+        "excluded_terminal_rows": 599,
+        "execution_constraints": "not_integrated_no_verified_market_masks",
+        "holdings_schema": "daily_positions_and_exits_v2",
+        "last_calendar_decision": "2025-12-29",
+        "missing_held_return": "error",
+        "outcome_calendar_lag": 2,
+        "schema_version": 2,
+        "universe_exit_policy": "error"
+      },
+      "corrected_market_performance": "not_established",
+      "dates": 1212,
+      "legacy_primary_metrics": {
+        "annualized_return": 0.08485642839546,
+        "maximum_drawdown": -0.2560732289447756,
+        "sharpe": 0.4450670968878167
+      },
+      "limitations": [
+        "saved scores only; models and raw outcomes not independently reproduced",
+        "selection comparison covers unbuffered weekly ranks only, not all path-dependent effects",
+        "calendar crop uses saved prediction dates, not an independently verified exchange calendar"
+      ],
+      "manifest_sha256": "b28ff0ab008d4bb719f72c27699a53e6eeb8dfbd0f839b0e661a9300d357e176",
+      "missing_returns_after_calendar_crop": 405,
+      "model": "ridge",
+      "prediction_rows": 363409,
+      "prediction_sha256": "3a71f8f4d816670fbf4b59958a8d889507ebb36a13d4bda3c2cec92efcc9fd6f",
+      "run_id": "csi300-pit-ridge-5f53b46fa6c9-20260928T085135Z",
+      "schema_version": 1,
+      "strict_replay": {
+        "first_error": "selected holdings have unavailable next-period returns at 2021-01-27: ['SH600340']; do not infer trade eligibility from future outcome availability",
+        "status": "blocked_by_valuation_policy"
+      },
+      "summary_rows_reconciled": 72,
+      "weekly_selection_differences": [
+        {
+          "date": "2022-04-06",
+          "excluded_high_score_names": [
+            "SH600009"
+          ],
+          "substituted_names": [
+            "SZ002938"
+          ]
+        }
+      ]
+    },
+    {
+      "artifact_hashes_verified": 14,
+      "calendar_policy": {
+        "cost_accounting": "gross_drift_weights_minus_linear_turnover_cost_overlay",
+        "excluded_terminal_rows": 599,
+        "execution_constraints": "not_integrated_no_verified_market_masks",
+        "holdings_schema": "daily_positions_and_exits_v2",
+        "last_calendar_decision": "2025-12-29",
+        "missing_held_return": "error",
+        "outcome_calendar_lag": 2,
+        "schema_version": 2,
+        "universe_exit_policy": "error"
+      },
+      "corrected_market_performance": "not_established",
+      "dates": 1212,
+      "legacy_primary_metrics": {
+        "annualized_return": 0.0535688606383208,
+        "maximum_drawdown": -0.4373133548230398,
+        "sharpe": 0.3234731952662781
+      },
+      "limitations": [
+        "saved scores only; models and raw outcomes not independently reproduced",
+        "selection comparison covers unbuffered weekly ranks only, not all path-dependent effects",
+        "calendar crop uses saved prediction dates, not an independently verified exchange calendar"
+      ],
+      "manifest_sha256": "686bec2ea5c04ac1a7de5191ce7c43e2b22b66bab755c358cb589175aeef9096",
+      "missing_returns_after_calendar_crop": 405,
+      "model": "lightgbm",
+      "prediction_rows": 363409,
+      "prediction_sha256": "0112a9cb254808492e2d16e78179c4a91f97aa1921d41003a2786d30f3b86681",
+      "run_id": "csi300-pit-lightgbm-925a4b7a8035-20260928T085342Z",
+      "schema_version": 1,
+      "strict_replay": {
+        "first_error": "selected holdings have unavailable next-period returns at 2021-01-27: ['SH600340']; do not infer trade eligibility from future outcome availability",
+        "status": "blocked_by_valuation_policy"
+      },
+      "summary_rows_reconciled": 72,
+      "weekly_selection_differences": [
+        {
+          "date": "2021-09-22",
+          "excluded_high_score_names": [
+            "SH600340"
+          ],
+          "substituted_names": [
+            "SH600362"
+          ]
+        },
+        {
+          "date": "2025-08-11",
+          "excluded_high_score_names": [
+            "SH600150",
+            "SH601989"
+          ],
+          "substituted_names": [
+            "SH600919",
+            "SH601818"
+          ]
+        },
+        {
+          "date": "2025-12-29",
+          "excluded_high_score_names": [
+            "SZ002049"
+          ],
+          "substituted_names": [
+            "SZ301236"
+          ]
+        }
+      ]
+    },
+    {
+      "artifact_hashes_verified": 14,
+      "calendar_policy": {
+        "cost_accounting": "gross_drift_weights_minus_linear_turnover_cost_overlay",
+        "excluded_terminal_rows": 599,
+        "execution_constraints": "not_integrated_no_verified_market_masks",
+        "holdings_schema": "daily_positions_and_exits_v2",
+        "last_calendar_decision": "2025-12-29",
+        "missing_held_return": "error",
+        "outcome_calendar_lag": 2,
+        "schema_version": 2,
+        "universe_exit_policy": "error"
+      },
+      "corrected_market_performance": "not_established",
+      "dates": 1212,
+      "legacy_primary_metrics": {
+        "annualized_return": -0.1133410931928254,
+        "maximum_drawdown": -0.6054936133517523,
+        "sharpe": -0.3625223844100146
+      },
+      "limitations": [
+        "saved scores only; models and raw outcomes not independently reproduced",
+        "selection comparison covers unbuffered weekly ranks only, not all path-dependent effects",
+        "calendar crop uses saved prediction dates, not an independently verified exchange calendar"
+      ],
+      "manifest_sha256": "cbb831c339ed7464d10164b04418a045c4e658a3bee7f411da9a201fe9801b46",
+      "missing_returns_after_calendar_crop": 405,
+      "model": "mlp",
+      "prediction_rows": 363409,
+      "prediction_sha256": "b965faf926244ae4ebf611017227061a61cb56517f4eea75d74cac7b9d8f02ed",
+      "run_id": "csi300-pit-mlp-seed17-d348ccba82b9-20260928T090525Z",
+      "schema_version": 1,
+      "strict_replay": {
+        "first_error": "selected holdings have unavailable next-period returns at 2021-01-27: ['SH600340']; do not infer trade eligibility from future outcome availability",
+        "status": "blocked_by_valuation_policy"
+      },
+      "summary_rows_reconciled": 72,
+      "weekly_selection_differences": [
+        {
+          "date": "2021-04-19",
+          "excluded_high_score_names": [
+            "SZ000425"
+          ],
+          "substituted_names": [
+            "SH600019"
+          ]
+        },
+        {
+          "date": "2021-12-13",
+          "excluded_high_score_names": [
+            "SH601555"
+          ],
+          "substituted_names": [
+            "SH600926"
+          ]
+        },
+        {
+          "date": "2022-12-05",
+          "excluded_high_score_names": [
+            "SZ001979"
+          ],
+          "substituted_names": [
+            "SH688599"
+          ]
+        },
+        {
+          "date": "2024-09-02",
+          "excluded_high_score_names": [
+            "SH600150"
+          ],
+          "substituted_names": [
+            "SH600875"
+          ]
+        },
+        {
+          "date": "2025-05-26",
+          "excluded_high_score_names": [
+            "SH688041"
+          ],
+          "substituted_names": [
+            "SZ000651"
+          ]
+        },
+        {
+          "date": "2025-12-22",
+          "excluded_high_score_names": [
+            "SH688012"
+          ],
+          "substituted_names": [
+            "SH603833"
+          ]
+        }
+      ]
+    }
+  ],
+  "status": "historical_artifacts_diagnosed_not_corrected_market_returns"
+}

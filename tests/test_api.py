@@ -26,6 +26,11 @@ class APITests(unittest.TestCase):
             run = root / "artifacts" / "demo" / "run-1"
             results = root / "case_studies" / "csi300_alpha" / "results"
             run.mkdir(parents=True)
+            sandbox = root / "artifacts" / "execution-demo" / "sandbox-run"
+            sandbox.mkdir(parents=True)
+            (sandbox / "run_manifest.json").write_text(json.dumps({
+                "run_id": "sandbox-run", "kind": "execution_sandbox", "status": "completed",
+            }))
             results.mkdir(parents=True)
             config = {
                 "model": {"name": "ridge"},

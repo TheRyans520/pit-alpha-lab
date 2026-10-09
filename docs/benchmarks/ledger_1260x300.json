@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "measured_at_utc": "2026-10-08T07:09:58.123531+00:00",
+  "python": "3.10.20",
+  "platform": "macOS-26.3.2-arm64-arm-64bit",
+  "machine": "arm64",
+  "logical_cpus": 6,
+  "packages": {
+    "numpy": "2.2.6",
+    "pandas": "2.3.3"
+  },
+  "source": {
+    "revision": "f743e847740ad41b20a4b3fbc8250371ab092ded",
+    "dirty": true,
+    "source_sha256": "708c8d852f275b6fbaac8d9f8cef71c27d4d8f4353f4d0d30b0be36d35252121",
+    "source_files": 56
+  },
+  "fixture": {
+    "days": 1260,
+    "instruments": 300,
+    "rows": 378000,
+    "seed": 17,
+    "top_k": 30,
+    "cost_bps": [
+      0,
+      5,
+      10,
+      20
+    ]
+  },
+  "measurement": "ledger only; imports/fixture construction excluded from time; RSS is whole child process high-water mark",
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "median_seconds": 0.3847589590000098,
+  "median_rows_per_second": 982433.2641465287,
+  "maximum_process_peak_rss_mib": 184.890625,
+  "runs": [
+    {
+      "seconds": 0.3847665829998732,
+      "rows_per_second": 982413.7976143437,
+      "process_peak_rss_mib": 184.890625,
+      "input_frame_mib": 31.362655639648438,
+      "output_sha256": "5beaafd7890530799a0a3b1e309684907d06cae44eb8c27320541589ad476277"
+    },
+    {
+      "seconds": 0.38033199999995304,
+      "rows_per_second": 993868.5148765991,
+      "process_peak_rss_mib": 184.78125,
+      "input_frame_mib": 31.362655639648438,
+      "output_sha256": "5beaafd7890530799a0a3b1e309684907d06cae44eb8c27320541589ad476277"
+    },
+    {
+      "seconds": 0.3847589590000098,
+      "rows_per_second": 982433.2641465287,
+      "process_peak_rss_mib": 184.734375,
+      "input_frame_mib": 31.362655639648438,
+      "output_sha256": "5beaafd7890530799a0a3b1e309684907d06cae44eb8c27320541589ad476277"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "case_study_files": [
+    {
+      "path": "execution_daily.csv",
+      "sha256": "b93e4ee5f44c26b3cd072b120749929253036de7510a658f379a6d4505517f88"
+    },
+    {
+      "path": "execution_positions.csv",
+      "sha256": "4b857f8177a7c8443a22b137f5b641d1eb40fb1e0a33b32078358ff0ab5eced9"
+    },
+    {
+      "path": "inputs.json",
+      "sha256": "14385870ec1bbfc6b35ff6ddf15b7482853b56f8847de579611b8000d8e4155e"
+    },
+    {
+      "path": "reconciliation.json",
+      "sha256": "9f4ea64aa8a155cf0b39e05c5cfb82f341d4f144777236c82c2526fe4ab38e7b"
+    }
+  ],
+  "evidence_level": "L0_synthetic",
+  "identical_artifacts": [
+    "inputs.json",
+    "execution_daily.csv",
+    "execution_positions.csv",
+    "reconciliation.json",
+    "report.md"
+  ],
+  "reconciliation": {
+    "events": 5,
+    "fees_paid": 223.26349089506988,
+    "final_nav": 107240.02760397499,
+    "position_rows": 10,
+    "status": "pass"
+  },
+  "run_ids": [
+    "execution-synthetic-20261008T141140738461Z",
+    "execution-synthetic-20261008T141140797287Z"
+  ],
+  "source": {
+    "dirty": true,
+    "revision": "ce1901834034947f7a8d64deecb15703618184bd",
+    "source_files": 60,
+    "source_sha256": "7e851c49816f0e5628f27f7cdad135c166c67bf6dd8672aacead57278436ff2a"
+  }
+}

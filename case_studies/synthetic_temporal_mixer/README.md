@@ -1,5 +1,9 @@
 # Synthetic Temporal Mixer development result
 
+> Historical development outputs below predate the inner-validation embargo fix.
+> Their files are preserved; they are not measurements of the current model code.
+
+
 This is a software and causality fixture, not evidence that the model can earn money in a real
 market. It exercises the new 60-session tensor, temporal adapter, annual walk-forward refits,
 portfolio construction, costs and artifact lineage on 62,640 deterministic synthetic panel rows.

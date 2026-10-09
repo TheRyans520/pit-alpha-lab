@@ -8,6 +8,11 @@ from pitalpha.metrics import breakeven_cost_bps, return_metrics
 
 
 class ReturnMetricTests(unittest.TestCase):
+    def test_missing_or_impossible_return_is_rejected(self) -> None:
+        for value in (float("nan"), float("inf"), -1.1):
+            with self.subTest(value=value), self.assertRaisesRegex(ValueError, "finite"):
+                return_metrics(pd.Series([0.01, value]))
+
     def test_first_day_loss_is_a_drawdown_from_initial_capital(self) -> None:
         metrics = return_metrics(pd.Series([-0.10]))
         self.assertAlmostEqual(metrics["cumulative_return"], -0.10)
