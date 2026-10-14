@@ -93,3 +93,22 @@ jobs:
         run: npm ci
       - name: Typecheck and production build
         run: npm run build
+
+  hk-data-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: pip
+      - name: Install isolated quote SDK environment
+        run: |
+          python -m venv .venv
+          .venv/bin/python -m pip install -r requirements.txt -r requirements-futu.txt
+          .venv/bin/python -m pip install --no-deps -e .
+      - name: Check optional SDK import and offline intake contracts
+        run: |
+          .venv/bin/python -c "import futu; assert all(callable(getattr(futu.OpenQuoteContext, name)) for name in ('request_history_kline', 'get_history_kl_quota', 'get_rehab'))"
+          .venv/bin/python -m unittest tests.test_futu_hk -v
+          .venv/bin/python -m pitalpha hk-data plan configs/hk_futu_pilot.yaml

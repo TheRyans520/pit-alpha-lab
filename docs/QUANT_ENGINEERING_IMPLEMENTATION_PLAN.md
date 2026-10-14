@@ -114,3 +114,17 @@ Delivered after the old project backup became available:
 The older 75-test result and initial missing-artifact statements above describe the first delivery.
 The historical CSI300 ledger remains a cost overlay; the new cash-accounting path is an L0 fixture
 until real point-in-time execution/valuation inputs can support integration.
+
+## HK data intake — 2026-10-14
+
+The optional Futu SDK is pinned and imported locally. `hk-data plan/doctor/collect/verify`
+implements a small read-only HK daily-data intake with explicit unadjusted bars, separate
+corporate-action responses, quota checks, pacing, paging validation, provenance and offline
+raw-to-normalized reconciliation. The complete local suite has 105 passing tests, including
+14 offline intake cases; web build and dependency checks pass. No real HK bars have been
+downloaded and no OpenD listener was found locally. User login to the official OpenD client
+is the remaining access prerequisite. See `HK_DATA_INTAKE.md` for the exact handoff.
+
+Successful download is intentionally `downloaded_unvalidated`, with `research_ready: false`.
+Next gates are real coverage inspection, independent calendar/source checks, corporate-action
+economics and historical universe evidence. This path does not upgrade the old CSI300 results.

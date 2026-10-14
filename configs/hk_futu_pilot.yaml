@@ -1,0 +1,7 @@
+schema_version: 1
+provider: futu_hk
+# Convenience sample for API/quality checks, not historical index constituents.
+symbols: [HK.00005, HK.00700, HK.02800]
+start: "2024-01-01"
+end: "2025-12-31"
+purpose: "Small HK intake pilot; no representative-universe or untouched-holdout claim"

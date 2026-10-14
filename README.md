@@ -111,6 +111,11 @@ pipeline used by the case study.
 
 ## Launch the dashboard
 
+For the new read-only Hong Kong data intake, see [HK data setup and audit](docs/HK_DATA_INTAKE.md).
+It preserves unadjusted daily bars and corporate-action responses locally, with paginated-download
+checks, source manifests and offline reconciliation. Live account access is not yet verified;
+downloaded data are explicitly marked as not research-ready until market-data validation is complete.
+
 Install the optional API dependencies into the same virtual environment:
 
 ```powershell

@@ -20,6 +20,18 @@ def _parser() -> argparse.ArgumentParser:
     commands = parser.add_subparsers(dest="command", required=True)
 
     commands.add_parser("doctor", help="Report interpreter and isolation status")
+    hk = commands.add_parser("hk-data", help="Read-only HK daily-data intake (not a research run)")
+    hk_commands = hk.add_subparsers(dest="hk_command", required=True)
+    hk_doctor = hk_commands.add_parser("doctor", help="Check SDK and local OpenD socket without downloading")
+    hk_doctor.add_argument("--port", type=int, default=11111)
+    hk_plan = hk_commands.add_parser("plan", help="Validate a pilot request without contacting a provider")
+    hk_plan.add_argument("request", type=Path)
+    hk_collect = hk_commands.add_parser("collect", help="Download private raw bars and corporate-action history")
+    hk_collect.add_argument("request", type=Path)
+    hk_collect.add_argument("--port", type=int, default=11111)
+    hk_collect.add_argument("--output-root", type=Path, default=Path("data/futu_hk"))
+    hk_verify = hk_commands.add_parser("verify", help="Rebuild quality checks from a saved intake offline")
+    hk_verify.add_argument("directory", type=Path)
     execution_demo = commands.add_parser("execution-demo", help="Run the synthetic cash-funded execution case study")
     execution_demo.add_argument("--output-root", type=Path, default=None)
     audit_run = commands.add_parser("audit-run", help="Verify and diagnose a saved historical research run")
@@ -82,6 +94,24 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = _parser()
     args = parser.parse_args(argv)
     try:
+        if args.command == "hk-data":
+            from pitalpha.data.futu_hk import collect_snapshot, connection_status, load_request, open_quotes, verify_snapshot
+            if args.hk_command == "doctor":
+                result = connection_status(args.port)
+                print(json.dumps(result, indent=2))
+                return 0 if result["ready_for_connection_attempt"] else 2
+            if args.hk_command == "verify":
+                result = verify_snapshot(args.directory)
+            else:
+                request = load_request(args.request)
+                if args.hk_command == "plan":
+                    result = {"valid": True, "request": request, "network_accessed": False,
+                              "adjustment": "NONE", "research_ready": False}
+                else:
+                    with open_quotes(args.port) as client:
+                        result = collect_snapshot(request, client, args.output_root)
+            print(json.dumps(result, indent=2))
+            return 0
         if args.command == "audit-run":
             from pitalpha.legacy_audit import audit_saved_run
             result = audit_saved_run(args.run_directory)

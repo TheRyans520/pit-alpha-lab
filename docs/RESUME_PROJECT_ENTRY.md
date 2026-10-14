@@ -3,7 +3,7 @@
 **PIT Alpha Lab | Quantitative Research & Portfolio Simulation Platform**  
 Python · NumPy/Pandas · scikit-learn · LightGBM · PyTorch · FastAPI · React · GitHub Actions
 
-- Built a Python equity-research platform with five model adapters, purged walk-forward evaluation and reproducible experiment artifacts; validated 91 automated tests covering leakage, accounting and API contracts.
+- Built a Python equity-research platform with five model adapters, purged walk-forward evaluation and reproducible experiment artifacts; validated 105 automated tests covering leakage, accounting, data intake and API contracts.
 - Implemented fee-funded share/cash accounting with buy/sell restrictions, ADV participation and turnover limits; independently reconciled inventory, fees and NAV under synthetic execution scenarios.
 - Audited 1.09 million archived model predictions across Ridge, LightGBM and MLP, identified future-outcome selection bias, and added explicit failures for unresolved held valuations.
 
@@ -25,7 +25,7 @@ experience needs a separate project.
 | Resume claim | Evidence |
 |---|---|
 | Five model adapters; purged evaluation | `src/pitalpha/models/registry.py`, `splits/validation.py`, `pipeline.py` |
-| 91 local tests, API and neural dependencies installed | `bash scripts/verify.sh`; `tests/` |
+| 105 local tests, API and neural dependencies installed | `bash scripts/verify.sh`; `tests/` |
 | Fee-funded quantities, cash and order restrictions | `src/pitalpha/backtest/execution.py`, `portfolio/constraints.py` |
 | Independent cash/inventory/NAV reconciliation | `src/pitalpha/backtest/execution_audit.py`, `tests/test_execution.py` |
 | Deterministic synthetic scenario evidence | `case_studies/synthetic_execution/results/evidence.json` |
@@ -46,3 +46,11 @@ experience needs a separate project.
 The case-study price path is artificial. Never put its positive NAV change on a resume as strategy
 performance. Do not quote the old 8.49% as corrected performance. AI-assisted work is usable only to
 the extent that the owner can explain and defend its design, limits and evidence.
+
+## HK intake extension — 2026-10-14
+
+A read-only Futu daily-data intake now preserves SDK responses, checks paging/quota/structure,
+and reconciles normalized artifacts offline. Optional SDK import and 14 offline contract tests
+have been checked locally. Live OpenD login, account entitlements and actual data coverage are
+still unverified; do not claim a live market feed or a completed HK strategy study.
+See `docs/HK_DATA_INTAKE.md` for the next local setup step and evidence boundaries.
