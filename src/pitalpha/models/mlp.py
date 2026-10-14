@@ -11,6 +11,8 @@ import pandas as pd
 import torch
 from torch import nn
 
+from pitalpha.splits.validation import purged_validation_split
+
 
 class _ReturnMLP(nn.Module):
     def __init__(self, input_dim: int, hidden_dims: list[int], dropout: float) -> None:
@@ -124,13 +126,12 @@ def fit_predict_mlp(
     _seed_everything(seed, threads)
     finite_label = np.isfinite(train["label"].to_numpy(dtype=float))
     training = train.loc[finite_label].sort_values(["datetime"], kind="stable")
-    unique_dates = pd.DatetimeIndex(training["datetime"].drop_duplicates().sort_values())
-    validation_dates = int(params["validation_dates"])
-    if len(unique_dates) <= validation_dates:
-        raise ValueError("MLP training window does not contain enough dates for chronological validation")
-    validation_start = unique_dates[-validation_dates]
-    subtrain = training[training["datetime"] < validation_start]
-    validation = training[training["datetime"] >= validation_start]
+    subtrain, validation, validation_metadata = purged_validation_split(
+        train,
+        validation_dates=int(params["validation_dates"]),
+        embargo_trading_days=int(params.get("validation_embargo_trading_days", 6)),
+    )
+
     subtrain_rows = int(len(subtrain))
     validation_rows = int(len(validation))
 
@@ -212,7 +213,7 @@ def fit_predict_mlp(
         "training_rows": int(len(training)),
         "subtrain_rows": subtrain_rows,
         "validation_rows": validation_rows,
-        "validation_start": pd.Timestamp(validation_start).date().isoformat(),
+        **validation_metadata,
         "test_rows": int(len(test)),
         "features": columns,
         "best_epoch": int(best_epoch + 1),

@@ -1,0 +1,23 @@
+{
+  "status": "pass",
+  "run_id": "demo-synthetic-ridge-349c20d9028e-20261008T070951Z",
+  "artifact_hashes": 14,
+  "prediction_rows": 23490,
+  "position_rows": 40006,
+  "daily_rows": 2346,
+  "scope": "software arithmetic only; not independent market-data or execution validation",
+  "source": {
+    "dirty": true,
+    "revision": "f743e847740ad41b20a4b3fbc8250371ab092ded",
+    "source_files": 56,
+    "source_sha256": "708c8d852f275b6fbaac8d9f8cef71c27d4d8f4353f4d0d30b0be36d35252121"
+  },
+  "experiment_id": "1ff8efbd9f4f73f69d0407f80443b31985e142208336fc6061abb81fe0b5857d",
+  "data": {
+    "daily_members_max": 30,
+    "daily_members_min": 30,
+    "dates": 2088,
+    "instruments": 36,
+    "rows": 62640
+  }
+}

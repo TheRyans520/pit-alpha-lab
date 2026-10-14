@@ -8,12 +8,27 @@ from pathlib import Path
 
 from pitalpha.artifacts import build_run_manifest, write_json_atomic
 from pitalpha.config import config_digest, load_config
+from pitalpha.artifacts.manifest import source_identity
 
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 class ManifestTests(unittest.TestCase):
+    def test_source_digest_detects_uncommitted_source_and_snapshot_changes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "src").mkdir()
+            path = root / "src" / "example.py"
+            path.write_text("value = 1\n")
+            first = source_identity(root)
+            path.write_text("value = 2\n")
+            second = source_identity(root)
+            self.assertNotEqual(first["source_sha256"], second["source_sha256"])
+            (root / "manifests").mkdir()
+            (root / "manifests" / "snapshot.json").write_text('{"snapshot": "new"}')
+            self.assertNotEqual(second["source_sha256"], source_identity(root)["source_sha256"])
+
     def test_manifest_separates_content_and_execution_identity(self) -> None:
         config_path = ROOT / "configs" / "demo_synthetic.yaml"
         config = load_config(config_path)

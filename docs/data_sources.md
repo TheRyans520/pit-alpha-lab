@@ -44,6 +44,12 @@ researcher cannot silently weaken them in prose.
 
 ## Expansion priorities
 
+The [HK intake adapter](HK_DATA_INTAKE.md) now supports read-only Futu daily-bar and corporate-action
+downloads with local provenance and structural verification. It is a separate market case, not a
+replacement for the original CSI300 snapshot. SDK import and offline contracts can be checked without
+OpenD; actual account permissions and real observations still need live validation. Successful intake
+is `downloaded_unvalidated`, not an upgrade to L2 or a certified historical return series.
+
 1. Add a second independent daily-price source and discrepancy report.
 2. Add explicit suspension, price-limit, ST and delisting status.
 3. Add point-in-time fundamental statements using announcement timestamps rather than fiscal

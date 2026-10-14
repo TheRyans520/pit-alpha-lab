@@ -39,7 +39,8 @@ class RunStore:
         for manifest_path in self.root.glob("*/*/run_manifest.json"):
             manifest = self._json(manifest_path)
             run_id = manifest.get("run_id")
-            if isinstance(run_id, str) and manifest.get("status") == "completed":
+            if (isinstance(run_id, str) and manifest.get("status") == "completed"
+                    and manifest.get("kind", "research") == "research"):
                 index[run_id] = manifest_path.parent.resolve()
         return index
 
@@ -136,6 +137,8 @@ def create_app(
             "model": model_name,
             "primary_cost_bps": cost,
             "artifacts_verified": store.verify(directory, manifest),
+            "accounting_policy": manifest.get("accounting_policy", {"status": "legacy_unrevalidated"}),
+            "data_source": manifest["data"]["source"],
             "data": metrics["data"],
             "data_quality": metrics["data_quality"],
             "prediction": prediction[0] if prediction else None,

@@ -1,5 +1,14 @@
 # CSI300 point-in-time model study
 
+> **2026-10-08 audit status:** Historical CSI300 performance below is provisional.
+> Portfolio selection previously depended on future-return availability, and neural
+> inner validation lacked a label embargo. Code has been hardened, but the frozen
+> market partitions are unavailable on the handoff computer, so corrected real-data
+> returns have **not** been reproduced. Use the project as research-engineering
+> evidence; do not quote these historical returns as revalidated resume results.
+> See [the audit](../../docs/QUANT_RESUME_READINESS_AUDIT.md).
+
+
 This case study is the first real-data model comparison from the public package pipeline. It uses the frozen
 `qlib-cn-2026-09-09-common-2025` snapshot, historical interval-at-date CSI300 membership,
 Alpha158-OHLCV-157 features and annual expanding-window refits. Ridge, LightGBM, MLP and the
@@ -93,3 +102,11 @@ cost break-even statistic is not a calibrated market-impact or capacity model.
 
 The source market data are intentionally absent from Git. The compact tables in `results/` are
 derived outputs tied to the run above.
+
+## Recovered archive follow-up
+
+The original prediction and ledger artifacts were supplied privately after the initial handoff.
+Their hashes and saved-return arithmetic have been checked. The new
+[archived-run diagnostic](../../docs/LEGACY_REPLAY_FINDINGS.md) confirms future-outcome selection
+changes and unresolved held returns. Raw source audit partitions are still unavailable;
+this follow-up does not establish corrected historical performance.

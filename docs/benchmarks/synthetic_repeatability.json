@@ -1,0 +1,24 @@
+{
+  "status": "pass",
+  "run_ids": [
+    "demo-synthetic-ridge-349c20d9028e-20261008T070951Z",
+    "demo-synthetic-ridge-349c20d9028e-20261008T071031Z"
+  ],
+  "experiment_id": "1ff8efbd9f4f73f69d0407f80443b31985e142208336fc6061abb81fe0b5857d",
+  "identical_artifacts": [
+    "config.resolved.json",
+    "data_quality_checks.csv",
+    "predictions.parquet",
+    "holdings.parquet",
+    "daily_returns.csv",
+    "prediction_daily_ic.csv",
+    "prediction_summary.csv",
+    "signal_quantiles.csv",
+    "signal_decay.csv",
+    "bootstrap_uncertainty.csv",
+    "portfolio_summary.csv",
+    "cost_break_even.csv",
+    "metrics.json"
+  ],
+  "excluded": "report.md contains execution-specific run identity"
+}

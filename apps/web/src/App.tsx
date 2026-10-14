@@ -346,7 +346,7 @@ function App() {
         </nav>
         <div className={`connection-status ${status}`}>
           <span className="status-dot" />
-          {status === "live" ? "Live artifacts" : status === "snapshot" ? "Audited snapshot" : "Connecting"}
+          {status === "live" ? "Live artifacts" : status === "snapshot" ? "Historical snapshot · provisional" : "Connecting"}
         </div>
       </header>
 
@@ -359,10 +359,10 @@ function App() {
             transition={{ duration: 0.65 }}
           >
             <div className="hero-kicker"><CircleDot size={14} /> CSI 300 · 2021–2025 OOS</div>
-            <h1>Research that<br /><em>survives hindsight.</em></h1>
+            <h1>Research with<br /><em>explicit assumptions.</em></h1>
             <p>
-              Point-in-time equity signals, tested under frozen universes, realistic turnover and
-              explicit transaction costs. Every number traces back to a checksum-audited run.
+              Point-in-time equity research with recorded assumptions and transaction costs.
+              Historical CSI300 returns await rerun after selection and validation fixes.
             </p>
             <div className="hero-actions">
               <a className="primary-button" href="#performance">Explore results <ArrowDownRight size={17} /></a>
@@ -376,7 +376,7 @@ function App() {
             transition={{ delay: 0.15, duration: 0.55 }}
           >
             <div className="proof-topline">
-              <span>Selected finding</span>
+              <span>Historical result · provisional</span>
               <span className="proof-index">01 / 03</span>
             </div>
             <div className="proof-number">+{pct(SNAPSHOT_COMPARISON[0].annualized_return)}</div>
@@ -387,7 +387,7 @@ function App() {
               <div><span>Max drawdown</span><strong>{pct(SNAPSHOT_COMPARISON[0].maximum_drawdown)}</strong></div>
               <div><span>Break-even</span><strong>{decimal(SNAPSHOT_COMPARISON[0].breakeven_one_way_cost_bps, 1)} bps</strong></div>
             </div>
-            <div className="proof-caption"><Check size={14} /> 14 / 14 semantic data checks passed</div>
+            <div className="proof-caption"><Check size={14} /> Original data checks passed; corrected returns not yet verified</div>
           </motion.div>
         </section>
 
@@ -451,7 +451,7 @@ function App() {
           <MetricCard
             label="Sharpe ratio"
             value={decimal(displayMetrics.sharpe, 2)}
-            note={status === "live" ? `${costBps} bps · ${buffered ? "buffered" : "standard"} rebalance` : "Audited snapshot · 10 bps"}
+            note={status === "live" ? `${costBps} bps · ${buffered ? "buffered" : "standard"} rebalance` : "Historical provisional snapshot · 10 bps"}
             tone={displayMetrics.sharpe >= 0 ? "positive" : "negative"}
           />
           <MetricCard
@@ -504,7 +504,7 @@ function App() {
                 <div className="empty-chart">
                   <Activity size={26} />
                   <strong>Start the local API to explore the full curve</strong>
-                  <span>The audited summary remains available in snapshot mode.</span>
+                  <span>The provisional historical summary remains available in snapshot mode.</span>
                   <code>python -m pitalpha serve</code>
                 </div>
               )}

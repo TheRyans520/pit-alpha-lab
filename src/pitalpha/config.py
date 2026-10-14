@@ -136,12 +136,16 @@ def validate_config(config: Mapping[str, Any]) -> None:
     if train_start < data_start or test_end > data_end:
         raise ConfigError("split windows must remain inside the configured data range")
     embargo = splits.get("embargo_trading_days")
-    if not isinstance(embargo, int) or embargo < horizon:
-        raise ConfigError("splits.embargo_trading_days must cover the label horizon")
+    if not isinstance(embargo, int) or embargo < horizon + 1:
+        raise ConfigError("splits.embargo_trading_days must cover the label horizon plus next-open execution lag")
 
     model = _mapping(root["model"], "model")
     _non_empty_string(model.get("name"), "model.name")
     _mapping(model.get("params"), "model.params")
+    if model["name"] in {"mlp", "market_context", "temporal_mixer"}:
+        inner_embargo = model["params"].get("validation_embargo_trading_days", 6)
+        if not isinstance(inner_embargo, int) or inner_embargo < max(6, horizon + 1):
+            raise ConfigError("model validation embargo must cover the label horizon plus execution lag")
 
     portfolio = _mapping(root["portfolio"], "portfolio")
     top_k = portfolio.get("top_k")

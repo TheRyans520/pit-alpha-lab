@@ -43,6 +43,7 @@ Repository = "https://github.com/TheRyans520/pit-alpha-lab"
 Issues = "https://github.com/TheRyans520/pit-alpha-lab/issues"
 
 [project.optional-dependencies]
+futu = ["futu-api==10.11.7108"]
 qlib = ["pyqlib==0.9.7"]
 dl = ["torch==2.10.0"]
 api = ["fastapi==0.141.1", "uvicorn==0.52.4", "pydantic==2.13.5", "httpx==0.28.1"]

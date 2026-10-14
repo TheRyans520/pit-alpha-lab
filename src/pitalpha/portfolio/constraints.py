@@ -48,8 +48,10 @@ class ExecutionConstraints:
             )
         if self.max_participation_rate is not None and not 0.0 < self.max_participation_rate <= 1.0:
             raise ValueError("max_participation_rate must be in (0, 1]")
-        if self.portfolio_notional is not None and self.portfolio_notional <= 0.0:
-            raise ValueError("portfolio_notional must be positive")
+        if self.portfolio_notional is not None and (
+            not math.isfinite(self.portfolio_notional) or self.portfolio_notional <= 0.0
+        ):
+            raise ValueError("portfolio_notional must be finite and positive")
         if not math.isfinite(self.tolerance) or self.tolerance <= 0.0:
             raise ValueError("tolerance must be finite and positive")
 
@@ -97,7 +99,7 @@ def project_bounded_long_only(
 
     # Euclidean projection onto sum(w) <= gross with box constraints. The
     # monotone threshold is solved deterministically by bisection.
-    values = list(clipped.values())
+    values = list(desired.values())
     lower = min(value - max_weight for value in values)
     upper = max(values)
     for _ in range(100):
@@ -110,7 +112,7 @@ def project_bounded_long_only(
     threshold = upper
     projected = {
         name: min(max(weight - threshold, 0.0), max_weight)
-        for name, weight in clipped.items()
+        for name, weight in desired.items()
     }
     return {name: weight for name, weight in projected.items() if weight > 0.0}
 
@@ -133,6 +135,9 @@ def enforce_execution_constraints(
     """
 
     previous = _validated_weights(previous_weights, "previous_weights")
+    for mask in (can_buy, can_sell):
+        if any(type(value) is not bool for value in mask.values()):
+            raise ValueError("tradeability masks must contain explicit boolean values")
     if math.fsum(previous.values()) > constraints.max_gross_exposure + constraints.tolerance:
         raise ValueError("previous_weights exceed max_gross_exposure")
     desired = project_bounded_long_only(

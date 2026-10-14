@@ -1,0 +1,130 @@
+{
+  "constraints": {
+    "max_gross_exposure": 1.0,
+    "max_participation_rate": 0.1,
+    "max_turnover": null,
+    "max_weight": 1.0,
+    "portfolio_notional": 100000.0,
+    "tolerance": 1e-12
+  },
+  "events": [
+    {
+      "adv_asof": "2026-01-04T08:30:00+00:00",
+      "at": "2026-01-05T01:30:00+00:00",
+      "average_daily_value": {
+        "A": 2000000.0,
+        "B": 2000000.0
+      },
+      "can_buy": {
+        "A": true,
+        "B": false
+      },
+      "can_sell": {
+        "A": true,
+        "B": true
+      },
+      "decision": {
+        "at": "2026-01-04T08:30:00+00:00",
+        "weights": {
+          "A": 0.5,
+          "B": 0.5
+        }
+      },
+      "prices": {
+        "A": 10.0,
+        "B": 20.0
+      }
+    },
+    {
+      "adv_asof": "2026-01-05T08:30:00+00:00",
+      "at": "2026-01-06T01:30:00+00:00",
+      "average_daily_value": {
+        "A": 2000000.0,
+        "B": 2000000.0
+      },
+      "can_buy": {
+        "A": true,
+        "B": true
+      },
+      "can_sell": {
+        "A": false,
+        "B": true
+      },
+      "decision": {
+        "at": "2026-01-05T08:30:00+00:00",
+        "weights": {
+          "B": 1.0
+        }
+      },
+      "prices": {
+        "A": 11.0,
+        "B": 19.0
+      }
+    },
+    {
+      "adv_asof": "2026-01-06T08:30:00+00:00",
+      "at": "2026-01-07T01:30:00+00:00",
+      "average_daily_value": {
+        "A": 100000.0,
+        "B": 80000.0
+      },
+      "can_buy": {
+        "A": true,
+        "B": true
+      },
+      "can_sell": {
+        "A": true,
+        "B": true
+      },
+      "decision": {
+        "at": "2026-01-06T08:30:00+00:00",
+        "weights": {
+          "B": 1.0
+        }
+      },
+      "prices": {
+        "A": 10.5,
+        "B": 21.0
+      }
+    },
+    {
+      "adv_asof": "2026-01-07T08:30:00+00:00",
+      "at": "2026-01-08T01:30:00+00:00",
+      "average_daily_value": {},
+      "can_buy": {},
+      "can_sell": {},
+      "decision": null,
+      "prices": {
+        "A": 10.7,
+        "B": 20.0
+      }
+    },
+    {
+      "adv_asof": "2026-01-08T08:30:00+00:00",
+      "at": "2026-01-09T01:30:00+00:00",
+      "average_daily_value": {
+        "A": 2000000.0,
+        "B": 2000000.0
+      },
+      "can_buy": {
+        "A": true,
+        "B": true
+      },
+      "can_sell": {
+        "A": true,
+        "B": true
+      },
+      "decision": {
+        "at": "2026-01-08T08:30:00+00:00",
+        "weights": {}
+      },
+      "prices": {
+        "A": 10.8,
+        "B": 20.5
+      }
+    }
+  ],
+  "evidence_level": "L0_synthetic",
+  "fee_bps": 10.0,
+  "initial_cash": 100000.0
+}

@@ -10,6 +10,19 @@ from pitalpha.portfolio import (
 
 
 class PortfolioConstraintTests(unittest.TestCase):
+    def test_projection_solves_original_weights_not_preclipped_weights(self):
+        result = project_bounded_long_only({"A": 1., "B": .3}, max_weight=.4, max_gross_exposure=.5)
+        self.assertAlmostEqual(result["A"], .4)
+        self.assertAlmostEqual(result["B"], .1)
+
+    def test_nonfinite_notional_and_ambiguous_masks_are_rejected(self):
+        for value in (float("nan"), float("inf")):
+            with self.assertRaisesRegex(ValueError, "finite"):
+                ExecutionConstraints(max_participation_rate=.1, portfolio_notional=value)
+        for value in (float("nan"), "false", 1):
+            with self.assertRaisesRegex(ValueError, "boolean"):
+                enforce_execution_constraints({}, {"A": 1.}, can_buy={"A": value}, can_sell={},
+                                              constraints=ExecutionConstraints())
     def test_invalid_participation_contract_is_rejected(self) -> None:
         with self.assertRaisesRegex(ValueError, "configured together"):
             ExecutionConstraints(max_participation_rate=0.05)

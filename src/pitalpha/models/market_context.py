@@ -17,6 +17,8 @@ import pandas as pd
 import torch
 from torch import nn
 
+from pitalpha.splits.validation import purged_validation_split
+
 from pitalpha.models.mlp import _fit_preprocessor, _seed_everything, _transform
 
 
@@ -297,13 +299,12 @@ def fit_predict_market_context(
     testing = test.sort_values(["datetime"], kind="stable")
     if not testing.index.equals(test.index):
         raise ValueError("market-context test rows must already be sorted by datetime")
-    unique_dates = pd.DatetimeIndex(training["datetime"].drop_duplicates())
-    validation_dates = int(params["validation_dates"])
-    if len(unique_dates) <= validation_dates:
-        raise ValueError("market-context training window lacks dates for chronological validation")
-    validation_start = unique_dates[-validation_dates]
-    subtrain = training[training["datetime"] < validation_start].reset_index(drop=True)
-    validation = training[training["datetime"] >= validation_start].reset_index(drop=True)
+    subtrain, validation, validation_metadata = purged_validation_split(
+        train,
+        validation_dates=int(params["validation_dates"]),
+        embargo_trading_days=int(params.get("validation_embargo_trading_days", 6)),
+    )
+
     subtrain_rows = int(len(subtrain))
     validation_rows = int(len(validation))
 
@@ -413,7 +414,7 @@ def fit_predict_market_context(
         "training_rows": int(len(training)),
         "subtrain_rows": subtrain_rows,
         "validation_rows": validation_rows,
-        "validation_start": pd.Timestamp(validation_start).date().isoformat(),
+        **validation_metadata,
         "test_rows": int(len(testing)),
         "features": columns,
         "best_epoch": int(best_epoch + 1),

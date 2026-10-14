@@ -1,6 +1,5 @@
 """Common model adapters."""
 
-from pitalpha.models.lightgbm import fit_predict_lightgbm
 from pitalpha.models.registry import (
     ENTRY_POINT_GROUP,
     ModelAdapter,
@@ -27,3 +26,10 @@ __all__ = [
     "run_model_adapter",
     "validate_model_response",
 ]
+
+
+def __getattr__(name):
+    if name == "fit_predict_lightgbm":
+        from pitalpha.models.lightgbm import fit_predict_lightgbm
+        return fit_predict_lightgbm
+    raise AttributeError(name)

@@ -46,7 +46,7 @@ class ConfigTests(unittest.TestCase):
 
     def test_short_embargo_is_rejected(self) -> None:
         config = load_config(ROOT / "configs" / "demo_synthetic.yaml")
-        config["splits"]["embargo_trading_days"] = 4
+        config["splits"]["embargo_trading_days"] = 5
         with self.assertRaisesRegex(ConfigError, "cover the label horizon"):
             validate_config(config)
 

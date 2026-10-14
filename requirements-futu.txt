@@ -1,0 +1,2 @@
+# Optional read-only HK data intake; install alongside requirements.txt.
+futu-api==10.11.7108
